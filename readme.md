@@ -76,3 +76,42 @@ cnpm i --save sass
 > ```
 >
 > 
+
+### 反向代理
+
+1. src目录下新建 `setupProxy.js` 配置文件
+
+2. 安装模块`http-proxy-middleware`
+
+   ```
+   cnpm i --save-dev http-proxy-middleware
+   ```
+
+3. 截取请求路径，将目标地址设为代理
+
+   ```js
+   const {createProxyMiddleware}=require('http-proxy-middleware')
+   
+   module.exports=function(app){
+       app.use(
+           '/ajax',
+           createProxyMiddleware({
+               target:'https://i.maoyan.com',
+               changeOrigin:true,
+           })
+       )
+   }
+   ```
+
+4. 重启！！！！！！
+
+## 路由
+
+![image-20220623211033515](C:\Users\ASUS\Desktop\MySystem\images\image-20220623211033515.png)
+
+### 安装
+
+```
+cnpm i --save react-router-dom
+```
+
