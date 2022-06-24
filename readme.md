@@ -105,7 +105,9 @@ cnpm i --save sass
 
 4. 重启！！！！！！
 
-## 路由
+## 搭建项目
+
+### 路由
 
 ![image-20220623211033515](C:\Users\ASUS\Desktop\MySystem\images\image-20220623211033515.png)
 
@@ -154,7 +156,7 @@ cnpm i --save react-router-dom
 
 ```
 
-## AntD引入+鸿蒙字体
+### AntD引入+鸿蒙字体
 
 ```
 cnpm i --save antd  
@@ -172,5 +174,32 @@ import 'antd/dist/antd.css';
 * {
   font-family: HarmonyOS;
 }
+```
+
+### 动态SideMenu
+
+v20.0.0
+
+items定义基本内容，防于Menu的items属性中，然后给Menu添加onClick事件，获取key值，进行路由跳转
+
+```jsx
+<Menu
+    mode="inline"
+    defaultSelectedKeys={['1']}
+    items={items}
+    onClick={(e) => { console.log(e.key) }}
+/>
+```
+
+### withRouter解决无路由组件（v5)
+
+对于没有被Route包裹的组件没有相关路由API，所以使用withRouter包裹
+
+### useNavigate解决无路由组件（v6)
+
+```
+const navigate=useNavigate()
+
+navigate(`/detail/${filmId}`)
 ```
 
