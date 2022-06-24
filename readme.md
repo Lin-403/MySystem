@@ -115,3 +115,62 @@ cnpm i --save sass
 cnpm i --save react-router-dom
 ```
 
+### 路由拦截
+
+```jsx
+<BrowserRouter>
+    <Routes>
+        <Route path="/login" element={<Login/>} />
+        {/* <Route path="/" element={<ArticleSendBox />} /> */}
+        <Route path='/' element={localStorage.getItem('token')?<ArticleSendBox/>:<Navigate to="/login" />} />
+    </Routes>
+</BrowserRouter>
+```
+
+### 路由搭建
+
+涉及到嵌套路由，子路由如下：
+
+```jsx
+<div>
+    <SideMenu></SideMenu>
+    <TopHeader></TopHeader>
+    <Routes>
+        <Route path="/home" element={<Home/>} />
+        <Route path="/user-manage/list" element={<UserList/>} />
+        <Route path="/right-mange/role/list" element={<RoleList/>} />
+        <Route path='/right-manage/right/list' element={<RightList/>} />
+        <Route path="/" element={<Navigate to="/home" />}/>
+        <Route path="*" element={<NotFound/>}/>
+    </Routes>
+
+</div>
+```
+
+父级路由书写如下： 路径为：` /*`
+
+```
+<Route path='/*' element={localStorage.getItem('token')?<ArticleSendBox/>:<Navigate to="/login" />} />
+
+```
+
+## AntD引入+鸿蒙字体
+
+```
+cnpm i --save antd  
+
+import 'antd/dist/antd.css';
+```
+
+鸿蒙字体添加
+
+```
+@font-face {
+  font-family: HarmonyOS;
+  src: url('../public/HarmonyOS_Sans_SC_Regular.ttf');
+}
+* {
+  font-family: HarmonyOS;
+}
+```
+

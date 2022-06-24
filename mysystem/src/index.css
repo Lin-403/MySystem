@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+@font-face {
+  font-family: HarmonyOS;
+  src: url('../public/HarmonyOS_Sans_SC_Regular.ttf');
+}
+* {
+  font-family: HarmonyOS;
+}

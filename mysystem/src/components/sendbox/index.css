@@ -1,0 +1,14 @@
+.logo{
+    line-height: 30px;
+    text-align: center;
+    font-size: 20px;
+    color: #505050;
+    /* color: #fff; */
+    padding:16px 10px;
+    background-color: #fbfbff;
+    border-bottom: 1px dotted #E9E9EB;
+}
+.ant-layout-sider-children {
+    background: #fff;
+    border-right: 1px solid #E9E9EB;
+  }
