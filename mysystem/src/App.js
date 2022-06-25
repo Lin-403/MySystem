@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './App.scss'
 import axios from 'axios'
 import IndexRouter from './router/IndexRouter.js';
-
+import './App.css'
 
 export default function App() {
   

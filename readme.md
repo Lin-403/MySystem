@@ -253,7 +253,10 @@ navigate(`/detail/${filmId}`)
 
 5. 级联查询（多表查询）
 
-   向下关联
+   （1）向下关联   _embed   用来获取包含下级资源的数据
+
+   > 比如我**json-server**服务器的端口号是**8081**,然后我的请求路径是**http://localhost:8081/posts/2?_embed=comments**
+   > 这个路径获取的就是posts下的id为2的数据和它关联的comments的数据：**{ "id": 1, "body": "some comment1111", "postId": 2 }**
 
    ```js
     axios.get("http://localhost:8000/posts?_embed=comments").then(res=>{
@@ -270,7 +273,11 @@ navigate(`/detail/${filmId}`)
    length: 5
    ```
 
-   向上关联  （根据某个评论查看文章相关信息）
+   （2）向上关联  （根据某个评论查看文章相关信息 ）  _expand   获取的是包含上级资源的数据
+
+   > 路径：**http://localhost:8081/comments/2?_expand=post**
+   > 上面这个路径获取的就是**comments**下**id**为2的数据和它关联的上级资源**post**，也就是**posts**下的：
+   > **{ "id": 1, "title": "post的第一个title", "author": "typicode" }**
 
    ```js
    axios.get("http://localhost:8000/comments?_expand=post").then(res => {
@@ -322,4 +329,28 @@ json-server --watch .\db.json --port 8000
 posts、comments、profile会被当作是接口
 
 上面程序运行之后出现一个网址，点击Resources下面的接口即可跳转到相应数据上
+
+### 记忆化显示SideMenu
+
+当选中侧边栏某一选项时，刷新后希望还是之前那栏被选中，并保证展开显示并且重定向时也是被选中显示的
+
+首先获取当前路由：useLocation获取当前路由
+
+```
+const location=useLocation()
+
+```
+
+然后设置Meu中属性：
+
+```
+defaultSelectedKeys={location.pathname}
+```
+
+然后将其父栏展开并保证：
+
+```
+selectedKeys={location.pathname}
+defaultOpenKeys={['/'+location.pathname.split('/')[1]]}
+```
 
