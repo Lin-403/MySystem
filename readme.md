@@ -191,15 +191,135 @@ items定义基本内容，防于Menu的items属性中，然后给Menu添加onCli
 />
 ```
 
-### withRouter解决无路由组件（v5)
+### `withRouter`解决无路由组件（v5)
 
-对于没有被Route包裹的组件没有相关路由API，所以使用withRouter包裹
+对于没有被Route包裹的组件没有相关路由API，所以使用`withRouter`包裹
 
-### useNavigate解决无路由组件（v6)
+### **useNavigate** 解决无路由组件（v6)
 
 ```
 const navigate=useNavigate()
 
 navigate(`/detail/${filmId}`)
 ```
+
+### Json-Server
+
+基于node封装的一个2框架，本身解决了跨域问题
+
+并带有数据库相关操作 RestApi
+
+1. 查询（get）：查询posts下id=2的数据  
+
+   ```js
+   axios.get("http://localhost:8000/posts/2").then(res=>{
+       console.log(res)
+   })
+   
+   //http://localhost:8000/posts?id=1 查询id=1
+   ```
+
+2. 增加（post）：(id自增)
+
+   ```js
+   axios.post("http://localhost:8000/posts",{
+       title:'hahahah',
+       author:'qwe'
+   })
+   ```
+
+3. 更新（全部更新put）：修改id=8的数据   -------需要将老数据都写入，不然会被舍弃
+
+   ```js
+   axios.put("http://localhost:8000/posts/8", {
+       title: 'hahahah--修改',
+       author: 'qwe'
+   })
+   ```
+
+   更新（局部更新patch）： 修改id=8的数据   -------不会影响老数据
+
+   ```js
+   axios.patch("http://localhost:8000/posts/8", {
+       title: 'hahahah--修改--patch',
+   })
+   ```
+
+4. 删除（delete）：级联删除
+
+   ```js
+   axios.delete("http://localhost:8000/posts/6")
+   ```
+
+5. 级联查询（多表查询）
+
+   向下关联
+
+   ```js
+    axios.get("http://localhost:8000/posts?_embed=comments").then(res=>{
+        console.log(res)
+    })
+   
+   //结果：能查出相同id下另一个表中的comments
+   data: Array(5)
+   0: {id: 1, title: '1111-修改-11111', author: 'kerwin', comments: Array(1)}
+   1: {title: '33333', author: 'xiaoming', id: 3, comments: Array(0)}
+   2: {title: 'hahahah', author: 'qwe', id: 4, comments: Array(0)}
+   3: {title: 'hahahah', author: 'qwe', id: 7, comments: Array(0)}
+   4: {title: 'hahahah--修改--patch', author: 'qwe', id: 8, comments: Array(0)}
+   length: 5
+   ```
+
+   向上关联  （根据某个评论查看文章相关信息）
+
+   ```js
+   axios.get("http://localhost:8000/comments?_expand=post").then(res => {
+       console.log(res)
+   })
+   
+   //结果  :会拿到相关post相关信息
+   data: Array(1)
+   0: {id: 1, body: '11111-comment', postId: 1, post: {…}}
+   length: 1
+   ```
+
+   
+
+6. 
+
+
+
+```
+网址：https://www.npmjs.com/package/json-server
+```
+
+下载安装：
+
+```
+npm install -g json-server
+```
+
+服务器启动
+
+```
+json-server --watch .\db.json --port 8000
+```
+
+对于下面json文件
+
+```
+{
+  "posts": [
+    { "id": 1, "title": "json-server", "author": "typicode" }
+  ],
+  "comments": [
+    { "id": 1, "body": "some comment", "postId": 1 }
+  ],
+  "profile": { "name": "typicode" }
+}
+```
+
+posts、comments、profile会被当作是接口
+
+上面程序运行之后出现一个网址，点击Resources下面的接口即可跳转到相应数据上
 
