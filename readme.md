@@ -354,3 +354,82 @@ selectedKeys={location.pathname}
 defaultOpenKeys={['/'+location.pathname.split('/')[1]]}
 ```
 
+### 权限
+
+1. Table
+
+   column可以添加属性render，内部可以写样式
+
+   ```
+   const columns = [
+           {
+               title: 'ID',
+               dataIndex: 'id',
+               render:(id)=>{
+                   return <b>{id}</b>
+               }
+           },
+   ```
+
+   分页：
+
+   ```jsx
+   <Table dataSource={dataSource} columns={columns}
+       pagination={{
+           pageSize:5
+       }} />
+   ```
+
+   子数据展示：树形数据展示（有children，自动显示树形数据）
+
+   ```jsx
+   useEffect(() => {
+       axios.get('http://localhost:8000/rights?_embed=children').then(res => {
+           var list=res.data;
+           list[0].children=''
+           setDataSource(list)
+       })
+   })
+   ```
+
+   
+
+2. 删除提示框
+
+   ```js
+   const deleteMethod=(item)=>{
+       console.log(item)
+       setDataSource(dataSource.filter(data=>data.id!==item.id))
+       axios.delete(`http://localhost:8000/rights/${item.id}`)
+   }
+   ```
+
+   但是遇到子级权限，删除不好使，所以根据grade进行判断是第几层的权限，然后做出相应操作
+
+   ```js
+    const deleteMethod = (item) => {
+        console.log(item)
+        if (item.grade === 1) {
+            setDataSource(dataSource.filter(data => data.id !== item.id))
+            axios.delete(`http://localhost:8000/rights/${item.id}`)
+        }
+        else {
+            //将同一父级item.rightId下的子权限全部提取出来
+            var list=dataSource.filter(data=>data.id===item.rightId)
+            // console.log(list)
+            //删除子级权限
+            list[0].children=list[0].children.filter(data=>data.id!==item.id)
+            console.log(list)
+            // list浅拷贝，所以dataSource内部也会跟着改变
+            // 因为改变的是第二级，所以需要在setDataSource时进行展开赋值
+            setDataSource([...dataSource])
+            axios.delete(`http://localhost:8000/children/${item.id}`)
+   
+        }
+    }
+   ```
+
+3. 页面配置项
+
+   对于页面侧边栏不显示的权限禁用处理，权限开关设置等
+

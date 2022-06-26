@@ -21,7 +21,7 @@ import { Layout, Menu } from 'antd';
 import SubMenu from 'antd/lib/menu/SubMenu';
 import axios from 'axios';
 import React, { memo, useEffect, useState } from 'react';
-import { useNavigate,useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './index.css'
 
 const { Sider } = Layout;
@@ -95,22 +95,24 @@ export default memo(function SideMenu() {
     }
     const navigate = useNavigate()
     // console.log(navigate)
-    const location=useLocation()
+    const location = useLocation()
     // console.log(location)
     const renderMenu = (menuList) => {
         var newlist = []
         menuList.map(item => {
-            item.icon = iconList[item.key]
-            if (item.children) {
-                item.children = item.children.filter(child => {
-                    child.icon = iconList[child.key]
-                    return checkPagepermisson(child)
-                })
+            if (checkPagepermisson(item)) {
+                item.icon = iconList[item.key]
+                if (item.children) {
+                    item.children = item.children.filter(child => {
+                        child.icon = iconList[child.key]
+                        return checkPagepermisson(child)
+                    })
+                }
+                if (item.children && item.children.length === 0) {
+                    delete item.children
+                }
+                newlist = [...newlist, item]
             }
-            if (item.children && item.children.length === 0) {
-                delete item.children
-            }
-            newlist = [...newlist, item]
         })
 
         return newlist
@@ -120,11 +122,11 @@ export default memo(function SideMenu() {
         <Sider trigger={null} collapsible >
             <div style={{ display: 'flex', 'flexDirection': 'column', height: '100%' }}>
                 <div className="logo">全球新闻发布系统</div>
-                <div style={{flex:'1',overflow:'auto'}}>
+                <div style={{ flex: '1', overflow: 'auto' }}>
                     <Menu
                         mode="inline"
                         selectedKeys={location.pathname}
-                        defaultOpenKeys={['/'+location.pathname.split('/')[1]]}
+                        defaultOpenKeys={['/' + location.pathname.split('/')[1]]}
                         items={renderMenu(items)}
                         onClick={(e) => { navigate(e.key) }}
                     />
