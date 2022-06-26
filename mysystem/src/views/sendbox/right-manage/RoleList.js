@@ -18,14 +18,14 @@ export default function RoleList() {
         axios.get('http://localhost:8000/roles').then(res => {
             setDataSource(res.data)
         })
-    })
+    },[])
     useEffect(() => {
         axios.get('http://localhost:8000/rights?_embed=children').then(res => {
             var list = res.data
             var s = JSON.parse(JSON.stringify(list).replace(/label/g, 'title'))
             setTreeData(s)
         })
-    })
+    },[])
     const columns = [
         {
             title: 'ID',

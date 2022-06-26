@@ -354,7 +354,7 @@ selectedKeys={location.pathname}
 defaultOpenKeys={['/'+location.pathname.split('/')[1]]}
 ```
 
-### 权限
+### 权限列表
 
 1. Table
 
@@ -480,4 +480,122 @@ var s=JSON.parse(JSON.stringify(list).replace(/label/g,'title'))
     };
 
 ```
+
+### 用户列表
+
+> 注意：columns在定义时，可以通过render改变渲染，其传入的第二个参数就是包含所有属性的状态item（请求得到的所有数据）
+
+
+
+添加用户时，使用到了**forwardRef**透传，这样通过父组件的ref就能拿到子组件的ref相关输入数据
+
+> 使用forwardRef包裹子组件，父组件定义状态（通过useRef）创建ref传递给子组件
+
+
+
+添加用户时选择角色，如果选择了超级管理员，则区域选择栏为空并且禁用，使用定义状态isDisable，值传给region使用，然后改变方法给role角色选择处理，如果是超级管理员则改变isDisable的值并调用ref下方法将region的值设为空
+
+（注意：点击添加时，需要对region的rules进行修改，不然会因为是空而无法提交，校验不成功）
+
+```js
+rules={isDisabled?[]:[{ required: true, message: 'Please input the title of collection!' }]}
+
+```
+
+
+
+```js
+ onChange={(value)=>{
+     if(value===1){
+         ref.current.setFieldsValue({
+             region:''
+         })
+         setIsDisabled(true)
+
+     }
+     else {
+         setIsDisabled(false)
+     }
+ }}
+```
+
+
+
+
+
+上面处理后我们可以拿到表单提交的数据，如果要将其存入数据库并且同步到页面中，我们需要考虑id的问题，后续删除和更新都是依据id进行操作，所以需要先存入数据库，生成id后再拿到前端页面展示
+
+```jsx
+ const addFormOk = () => {
+     addForm.current.validateFields().then(res => {
+         // console.log(res)
+         setIsVisible(false)
+         addForm.current.resetFields()
+         if (res.region === "") {
+             res.region = "全球"
+         }
+         //先存入数据库
+         axios.post(`http://localhost:8000/users`, {
+             ...res,
+             "roleState": true,
+             "default": false,
+         }).then(res1 => {
+             //  console.log(res1.data)
+             setDataSource([...dataSource, {
+                 ...res1.data,
+                 role: rolesList.filter(item => item.id === res.roleId)[0],
+             }])
+         })
+     }).catch(error => {
+         console.log(error)
+     })
+ }
+```
+
+
+
+
+
+用户状态改变（即是否允许登录）,给开关Switch挂载onChange事件
+
+```js
+ const handleChange = (item) => {
+     item.roleState = !item.roleState;
+     setDataSource([...dataSource])
+     axios.patch(`http://localhost:8000/users/${item.id}`, {
+         roleState:item.roleState
+     })
+ }
+```
+
+
+
+
+
+更新功能：要先显示原有数据，然后在原有数据上进行更新操作
+
+```js
+//获取原有数据并设置到ref上
+updateForm.current.setFieldsValue(item)
+```
+
+！！！！！注意：这里上面操作一旦刷新就不会获取到数据了，因为是异步操作，所以需要转成同步
+
+React17有setTimout，但是React18更新舍弃，但可以使用async/await
+
+```js
+async function handleUpdate(item){
+    // console.log(item)
+    await setIsUpdateVisible(true)
+    await updateForm.current.setFieldsValue(item)
+}
+```
+
+
+
+
+
+更新操作的时候，点下ok我们需要获取相关item，这个item是在handleUpdate中可以获取，所以额外定义一个状态进行存储
+
+遍历dataSource获取当前点击的那个属性，（根据id判断）然后覆盖值（记得覆盖role）
 

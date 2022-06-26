@@ -1,6 +1,15 @@
 {
   "users": [
     {
+      "username": "admin",
+      "password": "123456",
+      "roleState": true,
+      "default": true,
+      "region": "全球",
+      "roleId": 1,
+      "id": 1
+    },
+    {
       "username": "铁锤",
       "password": "123",
       "roleState": true,
@@ -62,6 +71,24 @@
       "roleState": true,
       "default": false,
       "id": 9
+    },
+    {
+      "username": "123",
+      "password": "123",
+      "region": "欧洲",
+      "roleId": 2,
+      "roleState": true,
+      "default": false,
+      "id": 10
+    },
+    {
+      "username": "test123",
+      "password": "123",
+      "region": "全球",
+      "roleId": 1,
+      "roleState": true,
+      "default": false,
+      "id": 11
     }
   ],
   "roles": [

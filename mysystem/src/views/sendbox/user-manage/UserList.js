@@ -1,7 +1,247 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { Button, Modal, Table, Switch, Select } from 'antd'
+import axios from 'axios';
+
+
+import {
+    DeleteOutlined,
+    EditOutlined,
+    ExclamationCircleOutlined
+} from '@ant-design/icons';
+import UserForm from '../../../components/user-manage/UserForm';
+
 
 export default function UserList() {
-  return (
-    <div>UserList</div>
-  )
+    var [dataSource, setDataSource] = useState([])
+    var [isVisible, setIsVisible] = useState(false)
+
+    const [regionList, setRegionList] = useState([])
+    const [rolesList, setRolesList] = useState([])
+    var addForm = useRef(null)
+
+    var [isUpdateVisible, setIsUpdateVisible] = useState(false)
+    var updateForm = useRef(null)
+    var [isDisable, setIsDisabled] = useState(false)
+
+    var [current, setCurrent] = useState(null)
+    useEffect(() => {
+        axios.get('http://localhost:8000/users?_expand=role').then(res => {
+            // console.log(res.data)
+            setDataSource(res.data)
+        })
+    }, [])
+    useEffect(() => {
+        axios.get('http://localhost:8000/regions').then(res => {
+            // console.log(res.data)
+            setRegionList(res.data)
+        })
+    }, [])
+
+    useEffect(() => {
+        axios.get('http://localhost:8000/roles').then(res => {
+            // console.log(res.data)
+            setRolesList(res.data)
+        })
+    }, [])
+
+    const columns = [
+        {
+            title: '区域',
+            dataIndex: 'region',
+            filters: [
+                ...regionList.map(item => ({
+                    text: item.title,
+                    value: item.value
+                })),
+                {
+                    text:'全球',
+                    value:'全球'
+                }
+            ],
+             onFilter: (value, item) => item.region===value,
+            render: (id) => {
+                return <b>{id}</b>
+            },
+            
+           
+        },
+        {
+            title: '角色名称',
+            dataIndex: 'role',
+            render: (role) => {
+                return role.roleName
+            }
+
+        },
+        {
+            title: '用户名',
+            dataIndex: 'username',
+
+        },
+        {
+            title: '用户状态',
+            dataIndex: 'roleState',
+            render: (roleState, item) => {
+
+                return <Switch onChange={() => handleChange(item)} checked={roleState} disabled={item.default}></Switch>
+            }
+        },
+        {
+            title: '操作',
+            render: (item) => {
+                return <div>
+                    <Button
+                        disabled={item.default}
+                        onClick={() => myConfirm(item)}
+                        style={{ marginRight: '10px' }} danger shape='circle' icon={<DeleteOutlined />} />
+                    <Button
+                        onClick={() => handleUpdate(item)}
+                        disabled={item.default} shape='circle' icon={<EditOutlined />} />
+
+                </div>
+            }
+        },
+    ];
+    const check = (item) => {
+        console.log(item)
+        if (item.roleId === 1) {
+            setIsDisabled(true)
+        }
+        else setIsDisabled(false)
+    }
+    async function handleUpdate(item) {
+        // console.log(item)
+
+        await setIsUpdateVisible(true)
+        await check(item)
+        await updateForm.current.setFieldsValue(item)
+        await setCurrent(item)
+
+    }
+    const handleChange = (item) => {
+
+
+        item.roleState = !item.roleState;
+
+
+        // console.log(dataSource)
+        setDataSource([...dataSource])
+        axios.patch(`http://localhost:8000/users/${item.id}`, {
+            roleState: item.roleState
+        })
+    }
+    const myConfirm = (item) => {
+        Modal.confirm({
+            title: 'Confirm',
+            icon: <ExclamationCircleOutlined />,
+            content: '确定要删除嘛？亲♥~',
+            okText: '确认',
+            cancelText: '取消',
+            onOk() {
+                deleteMethod(item)
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    };
+    const deleteMethod = (item) => {
+
+        setDataSource(dataSource.filter(data => data.id !== item.id))
+        axios.delete(`http://localhost:8000/users/${item.id}`)
+
+    }
+    const addFormOk = () => {
+        addForm.current.validateFields().then(res => {
+            // console.log(res)
+            setIsVisible(false)
+            addForm.current.resetFields()
+            if (res.region === "") {
+                res.region = "全球"
+            }
+            //先存入数据库
+            axios.post(`http://localhost:8000/users`, {
+                ...res,
+                "roleState": true,
+                "default": false,
+            }).then(res1 => {
+                //  console.log(res1.data)
+                setDataSource([...dataSource, {
+                    ...res1.data,
+                    role: rolesList.filter(item => item.id === res.roleId)[0],
+                }])
+            })
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+    const updateFormOk = () => {
+        updateForm.current.validateFields().then(res => {
+            setIsUpdateVisible(false)
+            if (res.region === "") {
+                res.region = "全球"
+            }
+            setDataSource(dataSource.map(item => {
+                if (item.id === current.id) {
+                    return {
+                        ...item,
+                        ...res,
+                        role: rolesList.filter(data => data.id === res.roleId)[0],
+
+                    }
+                }
+                return item
+            }))
+            axios.patch(`http://localhost:8000/users/${current.id}`, res)
+            //    console.log(res)
+            setIsDisabled(!isDisable)
+
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+    return (
+        <div style={{ height: '100%', overflow: 'auto' }}>
+            <Button type="primary" onClick={() => setIsVisible(true)}>添加用户</Button>
+            <Table dataSource={dataSource} columns={columns}
+                rowKey={item => item.key}
+                pagination={{
+                    pageSize: 5
+                }} />
+
+            <Modal
+                visible={isVisible}
+                title="添加用户"
+                okText="Add"
+                cancelText="Cancel"
+                onCancel={
+                    () => setIsVisible(false)
+                }
+                onOk={() => {
+                    // console.log('add',addForm)
+                    addFormOk()
+                }}
+            >
+                <UserForm ref={addForm} regionList={regionList} rolesList={rolesList} />
+            </Modal>
+            <Modal
+                visible={isUpdateVisible}
+                title="更新用户"
+                okText="Update"
+                cancelText="Cancel"
+                onCancel={
+                    () => {
+                        setIsUpdateVisible(false)
+                        setIsDisabled(!isDisable)
+                    }
+                }
+                onOk={() => {
+                    // console.log('add',addForm)
+                    updateFormOk()
+                }}
+            >
+                <UserForm isUpdateDisable={isDisable} ref={updateForm} regionList={regionList} rolesList={rolesList} />
+            </Modal>
+        </div>
+    )
 }

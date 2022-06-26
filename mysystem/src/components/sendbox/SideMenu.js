@@ -89,7 +89,7 @@ export default memo(function SideMenu() {
             // console.log(res)
             setItems(res.data)
         })
-    })
+    },[])
     const checkPagepermisson = (item) => {
         return item.pagepermisson === 1
     }
