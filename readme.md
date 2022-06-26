@@ -433,3 +433,51 @@ defaultOpenKeys={['/'+location.pathname.split('/')[1]]}
 
    对于页面侧边栏不显示的权限禁用处理，权限开关设置等
 
+### 角色列表
+
+注意：表格内部渲染，也是需要key值的，但是我们请求的角色列表的返回值是没有key值的，所以可以使用Table的`rowKey`属性，（`rowKey` ：表格行 key 的取值，可以是字符串或一个函数）
+
+
+
+角色列表右边按钮权限选择，之前SideMenu使用的label，但是TreeNode识别的是title，使用序列化转换
+
+思想如下（替换使用正则配合replace替换，正常情况下，replace只能替换一次）
+
+```js
+var list={'qwe':123,'qqq':111}
+var s=JSON.stringify(list) 
+s                       // '{"qwe":123,"qqq":111}'
+s.replace('qwe','aaa')  // '{"aaa":123,"qqq":111}'
+s                       // '{"qwe":123,"qqq":111}'
+JSON.parse(s)           // {qwe: 123, qqq: 111}
+
+
+var list=res.data
+var s=JSON.parse(JSON.stringify(list).replace(/label/g,'title'))
+```
+
+对于点击权限的取消和添加，获取当前选中权限的id，然后map遍历查找覆盖成新的的currentsRights，（每次点击后，受控属性currentsRights就会发生改变）
+
+```
+    const handleOk = () => {
+        setIsModalVisible(false);
+        // console.log(currentId)
+        //同步dataSource
+        setDataSource(dataSource.map(item=>{
+            if(item.id===currentId){
+                return {
+                    ...item,
+                    rights:currentRights
+                }
+            }
+            return item
+        }))
+
+        //同步数据库
+        axios.patch(`http://localhost:8000/roles/${currentId}`,{
+            rights:currentRights
+        })
+    };
+
+```
+

@@ -12,7 +12,7 @@ export default function ArticleSendboxRouter() {
         <Routes>
             <Route path="/home" element={<Home />} />
             <Route path="/user-manage/list" element={<UserList />} />
-            <Route path="/right-mange/role/list" element={<RoleList />} />
+            <Route path="/right-manage/role/list" element={<RoleList />} />
             <Route path='/right-manage/right/list' element={<RightList />} />
             <Route path="/" element={<Navigate to="/home" />} />
             <Route path="*" element={<NotFound />} />
