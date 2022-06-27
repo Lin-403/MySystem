@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Modal, Tree } from 'antd'
+import { message, Table, Button, Modal, Tree } from 'antd'
 import axios from 'axios'
 import {
     DeleteOutlined,
@@ -18,14 +18,14 @@ export default function RoleList() {
         axios.get('http://localhost:8000/roles').then(res => {
             setDataSource(res.data)
         })
-    },[])
+    }, [])
     useEffect(() => {
         axios.get('http://localhost:8000/rights?_embed=children').then(res => {
             var list = res.data
             var s = JSON.parse(JSON.stringify(list).replace(/label/g, 'title'))
             setTreeData(s)
         })
-    },[])
+    }, [])
     const columns = [
         {
             title: 'ID',
@@ -56,6 +56,9 @@ export default function RoleList() {
             }
         },
     ]
+    const success = () => {
+        message.success('This is a success message');
+    };
     const myConfirm = (item) => {
         Modal.confirm({
             title: 'Confirm',
@@ -74,33 +77,36 @@ export default function RoleList() {
     const deleteMethod = (item) => {
         setDataSource(dataSource.filter(data => data.id !== item.id))
         axios.delete(`http://localhost:8000/roles/${item.id}`)
-
+        success();
     }
     const handleOk = () => {
         setIsModalVisible(false);
         // console.log(currentId)
         //同步dataSource
-        setDataSource(dataSource.map(item=>{
-            if(item.id===currentId){
+        setDataSource(dataSource.map(item => {
+            if (item.id === currentId) {
                 return {
                     ...item,
-                    rights:currentRights
+                    rights: currentRights
                 }
             }
             return item
         }))
 
         //同步数据库
-        axios.patch(`http://localhost:8000/roles/${currentId}`,{
-            rights:currentRights
+        // console.log(currentRights)
+        axios.patch(`http://localhost:8000/roles/${currentId}`, {
+            rights: currentRights
         })
+        success()
     };
 
     const handleCancel = () => {
         setIsModalVisible(false);
     };
     const onCheck = (checkKeys) => {
-        setCurrentRights(checkKeys)
+        // console.log(checkKeys)
+        setCurrentRights(checkKeys.checked)
     }
     return (
         <div>

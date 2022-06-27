@@ -1,3 +1,11 @@
 ::-webkit-scrollbar {width:4px;height:5px;position:absolute;border-radius: 40%;}
 ::-webkit-scrollbar-thumb {background-color:#CBCBCB;border-radius: 30%;}
 ::-webkit-scrollbar-track {background-color:#ddd}
+
+.ant-layout {
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+    min-height: 0;
+    background: rgba(240,242,245,0.5);
+}

@@ -6,14 +6,20 @@ import {
 
 import React, { useState } from 'react'
 import { Dropdown,Avatar, Layout, Menu } from 'antd'
+import { useNavigate } from 'react-router-dom';
 const { Header } = Layout;
 
 export default function TopHeader() {
     var [collapsed, setCollapsed] = useState(false)
+    const navigate=useNavigate()
+    const {role:{roleName},username}=JSON.parse(localStorage.getItem('token'))
     const menu = (
         <Menu>
-            <Menu.Item>超级管理员</Menu.Item>
-            <Menu.Item danger>退出</Menu.Item>
+            <Menu.Item>{roleName}</Menu.Item>
+            <Menu.Item danger onClick={()=>{
+                localStorage.removeItem('token')
+                navigate('/login')
+            }}>退出</Menu.Item>
         </Menu>
       );
     return (
@@ -27,7 +33,7 @@ export default function TopHeader() {
                 collapsed ? <MenuUnfoldOutlined onClick={() => setCollapsed(!collapsed)} /> : <MenuFoldOutlined onClick={() => setCollapsed(!collapsed)} />
             }
             <div style={{ float: 'right' }}>
-                <span>欢迎admin回来</span>
+                <span style={{marginRight:'10px'}}>欢迎 <span style={{color:'#4266DC',fontSize:'16px'}}>{username}</span> 回来 </span>
                 <Dropdown overlay={menu}>
                     <span><Avatar size="large" icon={<UserOutlined />} /></span>
                 </Dropdown>

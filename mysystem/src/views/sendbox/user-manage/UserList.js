@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Button, Modal, Table, Switch, Select } from 'antd'
+import { message, Button, Modal, Table, Switch, Select, Alert } from 'antd'
 import axios from 'axios';
 
 
@@ -9,6 +9,7 @@ import {
     ExclamationCircleOutlined
 } from '@ant-design/icons';
 import UserForm from '../../../components/user-manage/UserForm';
+
 
 
 export default function UserList() {
@@ -24,12 +25,26 @@ export default function UserList() {
     var [isDisable, setIsDisabled] = useState(false)
 
     var [current, setCurrent] = useState(null)
+    //根据token获取当前用户相关信息
+    const { roleId, region, username } = JSON.parse(localStorage.getItem('token'))
+
+
     useEffect(() => {
+
+        const roleObj = {
+            "1": "superadmin",
+            "2": 'admin',
+            "3": 'editor'
+        }
         axios.get('http://localhost:8000/users?_expand=role').then(res => {
             // console.log(res.data)
-            setDataSource(res.data)
+            const list = res.data
+            setDataSource(roleObj[roleId] === "superadmin" ? list : [
+                ...list.filter(item => item.username === username),
+                ...list.filter(item => item.region === region && roleObj[item.roleId] === 'editor')
+            ])
         })
-    }, [])
+    }, [roleId, region, username])
     useEffect(() => {
         axios.get('http://localhost:8000/regions').then(res => {
             // console.log(res.data)
@@ -54,16 +69,16 @@ export default function UserList() {
                     value: item.value
                 })),
                 {
-                    text:'全球',
-                    value:'全球'
+                    text: '全球',
+                    value: '全球'
                 }
             ],
-             onFilter: (value, item) => item.region===value,
+            onFilter: (value, item) => item.region === value,
             render: (id) => {
                 return <b>{id}</b>
             },
-            
-           
+
+
         },
         {
             title: '角色名称',
@@ -149,12 +164,13 @@ export default function UserList() {
 
         setDataSource(dataSource.filter(data => data.id !== item.id))
         axios.delete(`http://localhost:8000/users/${item.id}`)
-
+        success()
     }
     const addFormOk = () => {
         addForm.current.validateFields().then(res => {
             // console.log(res)
             setIsVisible(false)
+            success()
             addForm.current.resetFields()
             if (res.region === "") {
                 res.region = "全球"
@@ -175,9 +191,13 @@ export default function UserList() {
             console.log(error)
         })
     }
+    const success = () => {
+        message.success('This is a success message');
+    };
     const updateFormOk = () => {
         updateForm.current.validateFields().then(res => {
             setIsUpdateVisible(false)
+            success()
             if (res.region === "") {
                 res.region = "全球"
             }
@@ -220,9 +240,11 @@ export default function UserList() {
                 onOk={() => {
                     // console.log('add',addForm)
                     addFormOk()
+
                 }}
             >
                 <UserForm ref={addForm} regionList={regionList} rolesList={rolesList} />
+
             </Modal>
             <Modal
                 visible={isUpdateVisible}
@@ -238,9 +260,11 @@ export default function UserList() {
                 onOk={() => {
                     // console.log('add',addForm)
                     updateFormOk()
+
                 }}
             >
-                <UserForm isUpdateDisable={isDisable} ref={updateForm} regionList={regionList} rolesList={rolesList} />
+
+                <UserForm isUpdate={true} isUpdateDisable={isDisable} ref={updateForm} regionList={regionList} rolesList={rolesList} />
             </Modal>
         </div>
     )

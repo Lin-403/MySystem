@@ -84,14 +84,16 @@ const iconList = {
 
 export default memo(function SideMenu() {
     const [items, setItems] = useState([])
+    const {role:{rights}}=JSON.parse(localStorage.getItem('token'))
     useEffect(() => {
         axios.get("http://localhost:8000/rights?_embed=children").then(res => {
             // console.log(res)
             setItems(res.data)
         })
     },[])
+    console.log(JSON.parse(localStorage.getItem('token')))
     const checkPagepermisson = (item) => {
-        return item.pagepermisson === 1
+        return item.pagepermisson && rights.includes(item.key)
     }
     const navigate = useNavigate()
     // console.log(navigate)

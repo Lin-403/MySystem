@@ -10,7 +10,7 @@ const { Content } = Layout;
 
 export default function ArticleSendBox() {
     return (
-        <Layout>
+        <Layout style={{baclground:'rgba(255,255,255,0)'}}>
             <SideMenu></SideMenu>
             <Layout className="site-layout">
                 <TopHeader></TopHeader>

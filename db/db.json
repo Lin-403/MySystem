@@ -11,7 +11,7 @@
     },
     {
       "username": "铁锤",
-      "password": "123",
+      "password": "1234",
       "roleState": true,
       "default": false,
       "region": "非洲",
@@ -41,7 +41,7 @@
       "password": "123",
       "roleState": true,
       "default": false,
-      "region": "南极洲",
+      "region": "欧洲",
       "roleId": 3,
       "id": 6
     },
@@ -84,8 +84,8 @@
     {
       "username": "test123",
       "password": "123",
-      "region": "全球",
-      "roleId": 1,
+      "region": "欧洲",
+      "roleId": 2,
       "roleState": true,
       "default": false,
       "id": 11
@@ -96,45 +96,41 @@
       "id": 1,
       "roleName": "超级管理员",
       "roleType": 1,
-      "rights": {
-        "checked": [
-          "/user-manage/add",
-          "/user-manage/delete",
-          "/user-manage/update",
-          "/user-manage/list",
-          "/right-manage",
-          "/right-manage/role/list",
-          "/right-manage/right/list",
-          "/right-manage/role/update",
-          "/right-manage/role/delete",
-          "/right-manage/right/update",
-          "/right-manage/right/delete",
-          "/news-manage",
-          "/news-manage/list",
-          "/news-manage/add",
-          "/news-manage/update/:id",
-          "/news-manage/preview/:id",
-          "/news-manage/draft",
-          "/news-manage/category",
-          "/audit-manage",
-          "/audit-manage/audit",
-          "/audit-manage/list",
-          "/publish-manage",
-          "/publish-manage/unpublished",
-          "/publish-manage/published",
-          "/publish-manage/sunset",
-          "/user-manage",
-          "/home"
-        ],
-        "halfChecked": []
-      }
+      "rights": [
+        "/user-manage/add",
+        "/user-manage/delete",
+        "/user-manage/update",
+        "/user-manage/list",
+        "/right-manage",
+        "/right-manage/role/list",
+        "/right-manage/right/list",
+        "/right-manage/role/update",
+        "/right-manage/role/delete",
+        "/right-manage/right/update",
+        "/right-manage/right/delete",
+        "/news-manage",
+        "/news-manage/list",
+        "/news-manage/add",
+        "/news-manage/update/:id",
+        "/news-manage/preview/:id",
+        "/news-manage/draft",
+        "/news-manage/category",
+        "/audit-manage",
+        "/audit-manage/audit",
+        "/audit-manage/list",
+        "/publish-manage",
+        "/publish-manage/unpublished",
+        "/publish-manage/published",
+        "/publish-manage/sunset",
+        "/user-manage",
+        "/home"
+      ]
     },
     {
       "id": 2,
       "roleName": "区域管理员",
       "roleType": 2,
       "rights": [
-        "/home",
         "/user-manage",
         "/user-manage/add",
         "/user-manage/delete",
@@ -149,11 +145,12 @@
         "/news-manage/category",
         "/audit-manage",
         "/audit-manage/audit",
-        "/audit-manage/list",
         "/publish-manage",
         "/publish-manage/unpublished",
         "/publish-manage/published",
-        "/publish-manage/sunset"
+        "/publish-manage/sunset",
+        "/home",
+        "/audit-manage/list"
       ]
     },
     {

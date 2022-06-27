@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Modal, Table, Tag,Popover, Switch } from 'antd'
+import { Button,message, Modal, Table, Tag,Popover, Switch } from 'antd'
 import axios from 'axios';
 import {
     DeleteOutlined,
@@ -21,7 +21,9 @@ export default function RightList() {
             setDataSource(list)
         })
     },[])
-
+    const success = () => {
+        message.success('This is a success message');
+      };
     const columns = [
         {
             title: 'ID',
@@ -74,7 +76,7 @@ export default function RightList() {
                 pagepermisson:item.pagepermisson
             })
         }
-        
+      success()
     }
     const myConfirm = (item) => {
         Modal.confirm({
@@ -92,7 +94,8 @@ export default function RightList() {
         });
     };
     const deleteMethod = (item) => {
-        console.log(item)
+        // console.log(item)
+        
         if (item.grade === 1) {
             setDataSource(dataSource.filter(data => data.id !== item.id))
             axios.delete(`http://localhost:8000/rights/${item.id}`)
@@ -110,6 +113,7 @@ export default function RightList() {
             axios.delete(`http://localhost:8000/children/${item.id}`)
 
         }
+        success()
     }
     return (
         <div style={{ height: '100%', overflow: 'auto' }}>

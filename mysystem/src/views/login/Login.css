@@ -1,0 +1,27 @@
+.loginContainer{
+    position: fixed;
+    width: 460px;
+    height: 320px;
+    top:50%;
+    left:50%;
+    background-color: rgba(86,86,86,0.5);
+    transform: translate(-50%,-50%);
+    border-radius: 10px;
+}
+.loginTitle{
+    font-size: 30px;
+    color:#fff;
+    text-align: center;
+    height: 80px;
+    line-height: 80px;
+}
+.loginForm{
+    width: 380px;
+}
+#normal_login{
+    margin-left: 50px;
+    width: 360px;
+}
+.login-form-button{
+    width: 360px;
+}
