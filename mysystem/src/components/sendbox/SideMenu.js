@@ -86,7 +86,7 @@ export default memo(function SideMenu() {
     const [items, setItems] = useState([])
     const {role:{rights}}=JSON.parse(localStorage.getItem('token'))
     useEffect(() => {
-        axios.get("http://localhost:8000/rights?_embed=children").then(res => {
+        axios.get("/rights?_embed=children").then(res => {
             // console.log(res)
             setItems(res.data)
         })

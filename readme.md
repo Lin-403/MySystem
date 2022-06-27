@@ -212,17 +212,17 @@ navigate(`/detail/${filmId}`)
 1. 查询（get）：查询posts下id=2的数据  
 
    ```js
-   axios.get("http://localhost:8000/posts/2").then(res=>{
+   axios.get("/posts/2").then(res=>{
        console.log(res)
    })
    
-   //http://localhost:8000/posts?id=1 查询id=1
+   ///posts?id=1 查询id=1
    ```
 
 2. 增加（post）：(id自增)
 
    ```js
-   axios.post("http://localhost:8000/posts",{
+   axios.post("/posts",{
        title:'hahahah',
        author:'qwe'
    })
@@ -231,7 +231,7 @@ navigate(`/detail/${filmId}`)
 3. 更新（全部更新put）：修改id=8的数据   -------需要将老数据都写入，不然会被舍弃
 
    ```js
-   axios.put("http://localhost:8000/posts/8", {
+   axios.put("/posts/8", {
        title: 'hahahah--修改',
        author: 'qwe'
    })
@@ -240,7 +240,7 @@ navigate(`/detail/${filmId}`)
    更新（局部更新patch）： 修改id=8的数据   -------不会影响老数据
 
    ```js
-   axios.patch("http://localhost:8000/posts/8", {
+   axios.patch("/posts/8", {
        title: 'hahahah--修改--patch',
    })
    ```
@@ -248,7 +248,7 @@ navigate(`/detail/${filmId}`)
 4. 删除（delete）：级联删除
 
    ```js
-   axios.delete("http://localhost:8000/posts/6")
+   axios.delete("/posts/6")
    ```
 
 5. 级联查询（多表查询）
@@ -259,7 +259,7 @@ navigate(`/detail/${filmId}`)
    > 这个路径获取的就是posts下的id为2的数据和它关联的comments的数据：**{ "id": 1, "body": "some comment1111", "postId": 2 }**
 
    ```js
-    axios.get("http://localhost:8000/posts?_embed=comments").then(res=>{
+    axios.get("/posts?_embed=comments").then(res=>{
         console.log(res)
     })
    
@@ -280,7 +280,7 @@ navigate(`/detail/${filmId}`)
    > **{ "id": 1, "title": "post的第一个title", "author": "typicode" }**
 
    ```js
-   axios.get("http://localhost:8000/comments?_expand=post").then(res => {
+   axios.get("/comments?_expand=post").then(res => {
        console.log(res)
    })
    
@@ -384,7 +384,7 @@ defaultOpenKeys={['/'+location.pathname.split('/')[1]]}
 
    ```jsx
    useEffect(() => {
-       axios.get('http://localhost:8000/rights?_embed=children').then(res => {
+       axios.get('/rights?_embed=children').then(res => {
            var list=res.data;
            list[0].children=''
            setDataSource(list)
@@ -400,7 +400,7 @@ defaultOpenKeys={['/'+location.pathname.split('/')[1]]}
    const deleteMethod=(item)=>{
        console.log(item)
        setDataSource(dataSource.filter(data=>data.id!==item.id))
-       axios.delete(`http://localhost:8000/rights/${item.id}`)
+       axios.delete(`/rights/${item.id}`)
    }
    ```
 
@@ -411,7 +411,7 @@ defaultOpenKeys={['/'+location.pathname.split('/')[1]]}
         console.log(item)
         if (item.grade === 1) {
             setDataSource(dataSource.filter(data => data.id !== item.id))
-            axios.delete(`http://localhost:8000/rights/${item.id}`)
+            axios.delete(`/rights/${item.id}`)
         }
         else {
             //将同一父级item.rightId下的子权限全部提取出来
@@ -423,7 +423,7 @@ defaultOpenKeys={['/'+location.pathname.split('/')[1]]}
             // list浅拷贝，所以dataSource内部也会跟着改变
             // 因为改变的是第二级，所以需要在setDataSource时进行展开赋值
             setDataSource([...dataSource])
-            axios.delete(`http://localhost:8000/children/${item.id}`)
+            axios.delete(`/children/${item.id}`)
    
         }
     }
@@ -474,7 +474,7 @@ var s=JSON.parse(JSON.stringify(list).replace(/label/g,'title'))
         }))
 
         //同步数据库
-        axios.patch(`http://localhost:8000/roles/${currentId}`,{
+        axios.patch(`/roles/${currentId}`,{
             rights:currentRights
         })
     };
@@ -535,7 +535,7 @@ rules={isDisabled?[]:[{ required: true, message: 'Please input the title of coll
              res.region = "全球"
          }
          //先存入数据库
-         axios.post(`http://localhost:8000/users`, {
+         axios.post(`/users`, {
              ...res,
              "roleState": true,
              "default": false,
@@ -562,7 +562,7 @@ rules={isDisabled?[]:[{ required: true, message: 'Please input the title of coll
  const handleChange = (item) => {
      item.roleState = !item.roleState;
      setDataSource([...dataSource])
-     axios.patch(`http://localhost:8000/users/${item.id}`, {
+     axios.patch(`/users/${item.id}`, {
          roleState:item.roleState
      })
  }

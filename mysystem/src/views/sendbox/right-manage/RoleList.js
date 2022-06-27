@@ -15,12 +15,12 @@ export default function RoleList() {
     var [currentRights, setCurrentRights] = useState([])
     var [currentId, setCurrentId] = useState(0)
     useEffect(() => {
-        axios.get('http://localhost:8000/roles').then(res => {
+        axios.get('/roles').then(res => {
             setDataSource(res.data)
         })
     }, [])
     useEffect(() => {
-        axios.get('http://localhost:8000/rights?_embed=children').then(res => {
+        axios.get('/rights?_embed=children').then(res => {
             var list = res.data
             var s = JSON.parse(JSON.stringify(list).replace(/label/g, 'title'))
             setTreeData(s)
@@ -76,7 +76,7 @@ export default function RoleList() {
     };
     const deleteMethod = (item) => {
         setDataSource(dataSource.filter(data => data.id !== item.id))
-        axios.delete(`http://localhost:8000/roles/${item.id}`)
+        axios.delete(`/roles/${item.id}`)
         success();
     }
     const handleOk = () => {
@@ -95,7 +95,7 @@ export default function RoleList() {
 
         //同步数据库
         // console.log(currentRights)
-        axios.patch(`http://localhost:8000/roles/${currentId}`, {
+        axios.patch(`/roles/${currentId}`, {
             rights: currentRights
         })
         success()

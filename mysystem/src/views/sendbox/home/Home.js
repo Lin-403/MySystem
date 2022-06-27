@@ -3,25 +3,25 @@ import axios from 'axios'
 
 export default function Home() {
     const getAxios = () => {
-        //  axios.get("http://localhost:8000/posts/1").then(res=>{
+        //  axios.get("/posts/1").then(res=>{
         //     console.log(res)
         // })
-        // axios.post("http://localhost:8000/posts", {
+        // axios.post("/posts", {
         //     title: 'hahahah',
         //     author: 'qwe'
         // })
-        // axios.put("http://localhost:8000/posts/8", {
+        // axios.put("/posts/8", {
         //     title: 'hahahah--修改',
         //     author: 'qwe'
         // })
-        // axios.patch("http://localhost:8000/posts/8", {
+        // axios.patch("/posts/8", {
         //     title: 'hahahah--修改--patch',
         // })
-        // axios.delete("http://localhost:8000/posts/6")
-        // axios.get("http://localhost:8000/posts?_embed=comments").then(res=>{
+        // axios.delete("/posts/6")
+        // axios.get("/posts?_embed=comments").then(res=>{
         //     console.log(res)
         // })
-        // axios.get("http://localhost:8000/comments?_expand=post").then(res => {
+        // axios.get("/comments?_expand=post").then(res => {
         //     console.log(res)
         // })
     }

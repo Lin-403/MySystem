@@ -36,7 +36,7 @@ export default function UserList() {
             "2": 'admin',
             "3": 'editor'
         }
-        axios.get('http://localhost:8000/users?_expand=role').then(res => {
+        axios.get('/users?_expand=role').then(res => {
             // console.log(res.data)
             const list = res.data
             setDataSource(roleObj[roleId] === "superadmin" ? list : [
@@ -46,14 +46,14 @@ export default function UserList() {
         })
     }, [roleId, region, username])
     useEffect(() => {
-        axios.get('http://localhost:8000/regions').then(res => {
+        axios.get('/regions').then(res => {
             // console.log(res.data)
             setRegionList(res.data)
         })
     }, [])
 
     useEffect(() => {
-        axios.get('http://localhost:8000/roles').then(res => {
+        axios.get('/roles').then(res => {
             // console.log(res.data)
             setRolesList(res.data)
         })
@@ -141,7 +141,7 @@ export default function UserList() {
 
         // console.log(dataSource)
         setDataSource([...dataSource])
-        axios.patch(`http://localhost:8000/users/${item.id}`, {
+        axios.patch(`/users/${item.id}`, {
             roleState: item.roleState
         })
     }
@@ -163,7 +163,7 @@ export default function UserList() {
     const deleteMethod = (item) => {
 
         setDataSource(dataSource.filter(data => data.id !== item.id))
-        axios.delete(`http://localhost:8000/users/${item.id}`)
+        axios.delete(`/users/${item.id}`)
         success()
     }
     const addFormOk = () => {
@@ -176,7 +176,7 @@ export default function UserList() {
                 res.region = "全球"
             }
             //先存入数据库
-            axios.post(`http://localhost:8000/users`, {
+            axios.post(`/users`, {
                 ...res,
                 "roleState": true,
                 "default": false,
@@ -212,7 +212,7 @@ export default function UserList() {
                 }
                 return item
             }))
-            axios.patch(`http://localhost:8000/users/${current.id}`, res)
+            axios.patch(`/users/${current.id}`, res)
             //    console.log(res)
             setIsDisabled(!isDisable)
 

@@ -11,7 +11,7 @@ import {
 export default function RightList() {
     var [dataSource, setDataSource] = useState([])
     useEffect(() => {
-        axios.get('http://localhost:8000/rights?_embed=children').then(res => {
+        axios.get('/rights?_embed=children').then(res => {
             var list = res.data;
             list.map(item => {
                 if (item.children && item.children.length === 0) {
@@ -67,12 +67,12 @@ export default function RightList() {
         item.pagepermisson=item.pagepermisson===1?0:1;
         setDataSource([...dataSource])
         if(item.grade===1){
-            axios.patch(`http://localhost:8000/rights/${item.id}`,{
+            axios.patch(`/rights/${item.id}`,{
                 pagepermisson:item.pagepermisson
             })
         }
         else {
-            axios.patch(`http://localhost:8000/children/${item.id}`,{
+            axios.patch(`/children/${item.id}`,{
                 pagepermisson:item.pagepermisson
             })
         }
@@ -98,7 +98,7 @@ export default function RightList() {
         
         if (item.grade === 1) {
             setDataSource(dataSource.filter(data => data.id !== item.id))
-            axios.delete(`http://localhost:8000/rights/${item.id}`)
+            axios.delete(`/rights/${item.id}`)
         }
         else {
             //将同一父级item.rightId下的子权限全部提取出来
@@ -110,7 +110,7 @@ export default function RightList() {
             // list浅拷贝，所以dataSource内部也会跟着改变
             // 因为改变的是第二级，所以需要在setDataSource时进行展开赋值
             setDataSource([...dataSource])
-            axios.delete(`http://localhost:8000/children/${item.id}`)
+            axios.delete(`/children/${item.id}`)
 
         }
         success()
