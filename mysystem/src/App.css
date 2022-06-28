@@ -9,3 +9,8 @@
     min-height: 0;
     background: rgba(240,242,245,0.5);
 }
+
+.ant-layout-content {
+    z-index: 1000;
+    border-radius: 5px;
+}

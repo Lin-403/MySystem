@@ -91,7 +91,7 @@ export default memo(function SideMenu() {
             setItems(res.data)
         })
     },[])
-    console.log(JSON.parse(localStorage.getItem('token')))
+    // console.log(JSON.parse(localStorage.getItem('token')))
     const checkPagepermisson = (item) => {
         return item.pagepermisson && rights.includes(item.key)
     }
