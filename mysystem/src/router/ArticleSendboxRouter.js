@@ -8,6 +8,7 @@ import Home from '../views/sendbox/home/Home'
 import NewsAdd from '../views/sendbox/news-manage/NewsAdd'
 import NewsCategory from '../views/sendbox/news-manage/NewsCategory'
 import NewsDraft from '../views/sendbox/news-manage/NewsDraft'
+import NewsPreview from '../views/sendbox/news-manage/NewsPreview'
 import NotFound from '../views/sendbox/notfound/NotFound'
 import Published from '../views/sendbox/publish-manage/Published'
 import Sunset from '../views/sendbox/publish-manage/Sunset'
@@ -24,6 +25,7 @@ const dataRoutes={
     "/news-manage/add": <NewsAdd />,
     '/news-manage/draft': <NewsDraft />,
     '/news-manage/category': <NewsCategory />,
+    '/news-manage/preview/:id': <NewsPreview />,
     '/audit-manage/audit': <Audit/>,
     '/audit-manage/list': <AuditList/>,
     '/publish-manage/unpublished': <Unpublished />,
@@ -47,7 +49,7 @@ export default function ArticleSendboxRouter() {
     const checkRoute=(item)=>{
         // console.log(item)
         //判断是否有这个路径，并判断其pagepermisson是否为1，即开关是否打开
-        return dataRoutes[item.key] && item.pagepermisson
+        return dataRoutes[item.key] && (item.pagepermisson|| item.routepermisson )
     }
     const checkUserPermission=(item)=>{
         return rights.includes(item.key)

@@ -107,6 +107,8 @@ cnpm i --save sass
 
 ## 搭建项目
 
+> 整个项目选择路由地址作为每个数据对象的key值，在侧边栏功能显示，不同角色权限展示、上都应用到了key，
+
 ### 路由
 
 ![image-20220623211033515](C:\Users\ASUS\Desktop\MySystem\images\image-20220623211033515.png)
@@ -212,17 +214,17 @@ navigate(`/detail/${filmId}`)
 1. 查询（get）：查询posts下id=2的数据  
 
    ```js
-   axios.get("/posts/2").then(res=>{
+   axios.get("http://localhost:8000/posts/2").then(res=>{
        console.log(res)
    })
    
-   ///posts?id=1 查询id=1
+   //http://localhost:8000/posts?id=1 查询id=1
    ```
 
 2. 增加（post）：(id自增)
 
    ```js
-   axios.post("/posts",{
+   axios.post("http://localhost:8000/posts",{
        title:'hahahah',
        author:'qwe'
    })
@@ -231,7 +233,7 @@ navigate(`/detail/${filmId}`)
 3. 更新（全部更新put）：修改id=8的数据   -------需要将老数据都写入，不然会被舍弃
 
    ```js
-   axios.put("/posts/8", {
+   axios.put("http://localhost:8000/posts/8", {
        title: 'hahahah--修改',
        author: 'qwe'
    })
@@ -240,7 +242,7 @@ navigate(`/detail/${filmId}`)
    更新（局部更新patch）： 修改id=8的数据   -------不会影响老数据
 
    ```js
-   axios.patch("/posts/8", {
+   axios.patch("http://localhost:8000/posts/8", {
        title: 'hahahah--修改--patch',
    })
    ```
@@ -248,7 +250,7 @@ navigate(`/detail/${filmId}`)
 4. 删除（delete）：级联删除
 
    ```js
-   axios.delete("/posts/6")
+   axios.delete("http://localhost:8000/posts/6")
    ```
 
 5. 级联查询（多表查询）
@@ -259,7 +261,7 @@ navigate(`/detail/${filmId}`)
    > 这个路径获取的就是posts下的id为2的数据和它关联的comments的数据：**{ "id": 1, "body": "some comment1111", "postId": 2 }**
 
    ```js
-    axios.get("/posts?_embed=comments").then(res=>{
+    axios.get("http://localhost:8000/posts?_embed=comments").then(res=>{
         console.log(res)
     })
    
@@ -280,7 +282,7 @@ navigate(`/detail/${filmId}`)
    > **{ "id": 1, "title": "post的第一个title", "author": "typicode" }**
 
    ```js
-   axios.get("/comments?_expand=post").then(res => {
+   axios.get("http://localhost:8000/comments?_expand=post").then(res => {
        console.log(res)
    })
    
@@ -384,7 +386,7 @@ defaultOpenKeys={['/'+location.pathname.split('/')[1]]}
 
    ```jsx
    useEffect(() => {
-       axios.get('/rights?_embed=children').then(res => {
+       axios.get('http://localhost:8000/rights?_embed=children').then(res => {
            var list=res.data;
            list[0].children=''
            setDataSource(list)
@@ -400,7 +402,7 @@ defaultOpenKeys={['/'+location.pathname.split('/')[1]]}
    const deleteMethod=(item)=>{
        console.log(item)
        setDataSource(dataSource.filter(data=>data.id!==item.id))
-       axios.delete(`/rights/${item.id}`)
+       axios.delete(`http://localhost:8000/rights/${item.id}`)
    }
    ```
 
@@ -411,7 +413,7 @@ defaultOpenKeys={['/'+location.pathname.split('/')[1]]}
         console.log(item)
         if (item.grade === 1) {
             setDataSource(dataSource.filter(data => data.id !== item.id))
-            axios.delete(`/rights/${item.id}`)
+            axios.delete(`http://localhost:8000/rights/${item.id}`)
         }
         else {
             //将同一父级item.rightId下的子权限全部提取出来
@@ -423,7 +425,7 @@ defaultOpenKeys={['/'+location.pathname.split('/')[1]]}
             // list浅拷贝，所以dataSource内部也会跟着改变
             // 因为改变的是第二级，所以需要在setDataSource时进行展开赋值
             setDataSource([...dataSource])
-            axios.delete(`/children/${item.id}`)
+            axios.delete(`http://localhost:8000/children/${item.id}`)
    
         }
     }
@@ -474,7 +476,7 @@ var s=JSON.parse(JSON.stringify(list).replace(/label/g,'title'))
         }))
 
         //同步数据库
-        axios.patch(`/roles/${currentId}`,{
+        axios.patch(`http://localhost:8000/roles/${currentId}`,{
             rights:currentRights
         })
     };
@@ -535,7 +537,7 @@ rules={isDisabled?[]:[{ required: true, message: 'Please input the title of coll
              res.region = "全球"
          }
          //先存入数据库
-         axios.post(`/users`, {
+         axios.post(`http://localhost:8000/users`, {
              ...res,
              "roleState": true,
              "default": false,
@@ -562,7 +564,7 @@ rules={isDisabled?[]:[{ required: true, message: 'Please input the title of coll
  const handleChange = (item) => {
      item.roleState = !item.roleState;
      setDataSource([...dataSource])
-     axios.patch(`/users/${item.id}`, {
+     axios.patch(`http://localhost:8000/users/${item.id}`, {
          roleState:item.roleState
      })
  }
@@ -598,4 +600,248 @@ async function handleUpdate(item){
 更新操作的时候，点下ok我们需要获取相关item，这个item是在handleUpdate中可以获取，所以额外定义一个状态进行存储
 
 遍历dataSource获取当前点击的那个属性，（根据id判断）然后覆盖值（记得覆盖role）
+
+
+
+
+
+### 登录页面
+
+1. 页面顶部退出，添加点击事件，然后使用useNavigate
+
+   ```js
+   const navigate=useNavigate()
+   
+   navigate(`/login`)
+   ```
+
+2. 粒子效果引入（github搜react particle）
+
+   ```
+   https://github.com/wufe/react-particles-js
+   ```
+
+   这里注意层级问题；当粒子效果的层级提升后，会影响下级层级的点击事件，
+
+   > 其实方法很简单只要设置样式： pointer-events: none;如果你已经设置一个元素的css属性为pointer-events: none。它将不会捕获任何click事件，而是让事件穿过该元素到达下面的元素Pointer-events原本来bai源于SVG，目前在很多浏览器中已经得到体现du。不过，要让任何zhiHTML元素生效还得借助于一点点css。该属性称之为pointer-events，基本上可以将它设置为auto，这是正常的行为，而“none”是一个有趣的属性
+
+3. json-server限制
+
+   正常表单登录验证，需要发送post请求，但是json-server本身认为post请求是在添加数据，所以这里表单提交验证使用get请求
+
+4. token
+
+   token设置直接采用明文` res.data`
+
+5. 不同角色登录页不同展示
+
+   数据存储时设置相应用户有相应权限，路由、侧边栏权限展示都与存储的key值有关，即每个数据对象都有一个属性key，这个key对应的是路由值，所以在每个角色的存储中，会有一项rights，内部是其所具有的权限（以路由形式存储）
+
+   而区分不同角色的属性则是users数据对象中存储了roleId，根据roleId判断是哪一类角色
+
+   然后显示时只需根据不同的角色中不同的rights属性进行显示渲染到侧边栏
+
+6. 权限分配问题
+
+   到现在为止，如果是区域管理员，其可以操作用户列表，但是注意，用户列表此时是包含超级管理员的，并且，对于区域管理员，是不能选择超级管理员这个一身份的。这里会出现权限混乱情况
+
+   我们需要的是一个角色具有自己及比自己等级低的角色的权限
+
+   ***（即区域管理员只能管理、编辑、删除同一区区域下的区域编辑）***
+
+   然后再一个问题：创建和更新时，也需要注意以上权限问题，所以决定将创建和跟新在Form中分别针对不同的身份进行处理（注意还要对区域选择和角色选择分开处理，但两者逻辑一样）
+
+### 路由权限
+
+虽然我们可以根据角色的身份控制访问页面的相关权限显示，但是如果我们知道某个权限的路径，则可以直接通过访问地址跳转到相关页面而不受侧边栏的控制，也就是说我们可以通过地址栏访问所有路由
+
+所以我们需要设置路由权限控制上面的问题
+
+1. 权限数据扁平化
+
+   想要设计一个动态的路由，我们希望后端给我们的是一个路由的一维的表，而不是一个多层的数组，我们还要逐层取数据，所以需要将权限的第1、2级合并处理，这里的合并需要进行两次请求，并将请求的结果合并没所以可以进行 
+
+   ```js
+   useEffect(()=>{
+       Promise.all([
+           axios.get('http://localhost:8000/rights'),
+           axios.get('http://localhost:8000/children')
+       ]).then(res=>{
+           console.log(res)
+           setBackData([...res[0].data,...res[1].data]) //得到扁平化数据
+       })
+   },[])
+   
+   //得到一个数组，数组中有两个数据分别是那两个请求
+   //Array(2)
+   //0: {data: Array(6), status: 200, statusText: 'OK', headers: {…}, config: {…}, …}
+   //1: {data: Array(21), status: 200, statusText: 'OK', headers: {…}, config: {…}, …}
+   
+   ```
+
+   然后就可以使用map遍历将路由表遍历出来，并在map中判断是否有权限，根据token获取数据
+
+   > 判断有两种情况：
+   >
+   > 1. 当前用户的某些权限是否被关上（开关控制）
+   > 2. 当前用户身份
+   >
+   > ```js
+   >  const checkRoute=(item)=>{
+   >      console.log(item)
+   >      //判断是否有这个路径，并判断其pagepermisson是否为1，即开关是否打开
+   >      return dataRoutes[item.key] && item.pagepermisson
+   >  }
+   >  const checkUserPermission=(item)=>{
+   >      return rights.includes(item.key)
+   >  }
+   > ```
+   >
+   > 
+
+### 进度条
+
+```js
+https://www.npmjs.com/search?q=nprogress
+https://www.npmjs.com/package/nprogress
+
+npm install --save nprogress
+
+NProgress.start();
+NProgress.done();
+
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
+使用axios拦截器
+axios.interceptors.request.use(
+    config => {
+        NProgress.start() // 设置加载进度条(开始..)
+        return config
+    },
+    error => {
+        return Promise.reject(error)
+    }
+)
+// axios响应拦截器
+axios.interceptors.response.use(
+    function (response) {
+        NProgress.done() // 设置加载进度条(结束..)
+        return response
+    },
+    function (error) {
+        return Promise.reject(error)
+    }
+)
+```
+
+### axios拦截器（一）
+
+```
+import axios from 'axios'
+
+axios.defaults.baseURL="http://localhost:8000"
+
+```
+
+### 新闻发布
+
+新闻的发布有四种情况，：
+
+```js
+未发布（publishState=0）
+待发布（publishState=1) 
+已发布（publishState=2）
+已下线（publishState=3)
+```
+
+#### 1.撰写新闻
+
+引入pageHeader页头，Steps步骤组件
+
+根据逻辑判断按钮显示，表单（Form）校验是否可以进入下一步（为空没有输入则不行）
+
+> (引入富文本编辑器)
+>
+> 
+>
+> ~~github搜 react draft~~
+>
+> ```
+> https://github.com/jpuri/react-draft-wysiwyg
+> 
+> npm install --save react-draft-wysiwyg draft-js
+> ```
+>
+> ~~然后以html文件形式存储~~
+>
+> ```
+>  cnpm i --save draftjs-to-html  
+> ```
+>
+> ```
+>     // "react": "^18.2.0",
+>     // "react-dom": "^18.2.0",
+>     
+> ```
+>
+> 使用
+>
+> ```
+> https://github.com/wangfupeng1988/react-wangeditor-demo
+> ```
+>
+> 
+
+提交到草稿箱或者审核列表，定义两种状态为0，1，发起axios请求
+
+```js
+const handleNews = (e) => {
+    axios.post('/news', {
+        ...info,
+        "content": content,
+        "region": user.region?user.region:'全球',
+        "author": user.username,
+        "roleId": user.roleId,
+        "auditState": e,
+        "publishState": 0,
+        "createTime": Date.now(),
+        "star": 0,
+        "view": 0,
+    }).then(res=>{
+        // console.log(res)
+        navigate(`${e===0?'/news-manage/draft':'/audit-manage/list'}`)
+        notification.info({
+            message: `Notification`,
+            description:
+            `你可以到${e===0?'草稿箱':'审核列表'}中查看新闻`,
+            placement:'bottomRight',
+        });
+    })
+}
+
+```
+
+### 草稿箱
+
+1. momentjs：创建时间显示
+
+   ```
+   cnpm i --save moment
+   
+   {moment(newsDetail.createTime).format('YYYY-MM-DD HH-mm-ss')}
+   // HH是24时间制度  hh是12时间
+   ```
+
+2. html内容显示，防止XSS（跨站脚本攻击）
+
+   为了防止XSS，所以{}是不支持html文件解析的
+
+   如果非要解析：
+
+```jsx
+<div dangerouslySetInnerHTML={{
+        __html:newsDetail.content
+    }}></div>
+```
 
