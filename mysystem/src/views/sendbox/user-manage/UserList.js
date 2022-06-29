@@ -195,8 +195,9 @@ export default function UserList() {
         message.success('This is a success message');
     };
     const updateFormOk = () => {
-        updateForm.current.validateFields().then(res => {
+        updateForm.current.validateFields().then((res) => {
             setIsUpdateVisible(false)
+
             success()
             if (res.region === "") {
                 res.region = "全球"
@@ -213,6 +214,8 @@ export default function UserList() {
                 return item
             }))
             axios.patch(`/users/${current.id}`, res)
+            console.log(res)
+            
             //    console.log(res)
             setIsDisabled(!isDisable)
 
@@ -220,6 +223,7 @@ export default function UserList() {
             console.log(error)
         })
     }
+   
     return (
         <div style={{ height: '100%', overflow: 'auto' }}>
             <Button type="primary" onClick={() => setIsVisible(true)}>添加用户</Button>
