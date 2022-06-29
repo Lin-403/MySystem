@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Button, message, Modal, Table, Tag, Popover, Switch } from 'antd'
+import { Button, message, Modal, Table, notification} from 'antd'
 
 import {
   DeleteOutlined,
@@ -13,6 +13,8 @@ import { useNavigate } from 'react-router-dom';
 export default function NewsDraft() {
   var [dataSource, setDataSource] = useState([])
   const user = JSON.parse(localStorage.getItem('token'))
+  const navigate = useNavigate()
+
   useEffect(() => {
     axios.get(`/news?author=${user.username}&auditState=0&_expand=category`).then(res => {
       // console.log(res.data)
@@ -42,7 +44,21 @@ export default function NewsDraft() {
     axios.delete(`/news/${item.id}`)
     success();
   }
-  const navigate=useNavigate()
+
+  const handleSubmit = (item) => {
+    console.log(item)
+    axios.patch(`/news/${item.id}`, {
+      auditState: 1
+    }).then(res => {
+      navigate('/audit-manage/list')
+      notification.info({
+        message: `Notification`,
+        description:
+          `你可以到审核列表中查看新闻`,
+        placement: 'bottomRight',
+      });
+    })
+  }
   const columns = [
     {
       title: 'ID',
@@ -54,8 +70,8 @@ export default function NewsDraft() {
     {
       title: '新闻标题',
       dataIndex: 'title',
-      render:(title,item)=>{
-          return <a href={`/news-manage/preview/${item.id}`}>{title}</a>
+      render: (title, item) => {
+        return <a href={`/news-manage/preview/${item.id}`}>{title}</a>
       }
     },
     {
@@ -80,9 +96,14 @@ export default function NewsDraft() {
             style={{ marginRight: '10px' }} danger shape='circle' icon={<DeleteOutlined />} />
 
           <Button style={{ marginRight: '10px' }}
+            onClick={() => { navigate(`/news-manage/update/${item.id}`) }}
             shape='circle' icon={<EditOutlined />} />
 
-          <Button style={{ backgroundColor: '#1890FF', color: '#fff' }} shape='circle' icon={<VerticalAlignTopOutlined />} />
+          <Button
+            onClick={() => {
+              handleSubmit(item)
+            }}
+            style={{ backgroundColor: '#1890FF', color: '#fff' }} shape='circle' icon={<VerticalAlignTopOutlined />} />
         </div>
       }
     },

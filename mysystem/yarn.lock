@@ -2276,11 +2276,6 @@
     scroll-into-view-if-needed "^2.2.28"
     slate-history "^0.66.0"
 
-"@wangeditor/editor-for-react@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.npmmirror.com/@wangeditor/editor-for-react/-/editor-for-react-1.0.4.tgz#497b8a2e9a5df99a5686d8956ab780a75af1e1cc"
-  integrity sha512-cw2w5K9P5DUicHDUb6ZeLd6AeKA8o4V3LmXVObImo+kqC86Hi8WqXpIWuUNBCy+pCHsEYFo5YIhpzY64vhB2kw==
-
 "@wangeditor/editor@^5.1.1":
   version "5.1.1"
   resolved "https://registry.npmmirror.com/@wangeditor/editor/-/editor-5.1.1.tgz#009b11277de86a4052087d0428934e7d2dd30147"
@@ -6547,7 +6542,7 @@ mkdirp@~0.5.1:
   dependencies:
     minimist "^1.2.6"
 
-moment@^2.24.0, moment@^2.29.2:
+moment@^2.24.0, moment@^2.29.2, moment@^2.29.3:
   version "2.29.3"
   resolved "https://registry.npmmirror.com/moment/-/moment-2.29.3.tgz#edd47411c322413999f7a5940d526de183c031f3"
   integrity sha512-c6YRvhEo//6T2Jz/vVtYzqBzwvPT95JBQ+smCytzf7c50oMZRsR/a4w88aD34I+/QVSfnoAnSBFPJHItlOMJVw==

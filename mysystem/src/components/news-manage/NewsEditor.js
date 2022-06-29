@@ -1,15 +1,13 @@
 import React, { useState, useEffect, Component } from 'react'
 
 
-import { Button, Card, Modal } from 'antd'
-
 // import { Editor } from "react-draft-wysiwyg";
 // import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 // import { EditorState, convertToRaw } from 'draft-js';
 // import draftToHtml from 'draftjs-to-html';
 // import draftjs from 'draftjs-to-html'
 
-import '@wangeditor/editor/dist/css/style.css' // 引入 css
+
 import { Editor, Toolbar } from '@wangeditor/editor-for-react'
 
 
@@ -17,11 +15,16 @@ import { Editor, Toolbar } from '@wangeditor/editor-for-react'
 export default function NewsEditor(props) {
     const [editor, setEditor] = useState(null) // 存储 editor 实例
     const [html, setHtml] = useState('<p></p>') // 编辑器内容
-
+    // console.log(props.content)
     // 模拟 ajax 请求，异步设置 html
     useEffect(() => {
-
-    }, [])
+        setTimeout(() => {
+            // console.log(props.content)
+            if (props.content) {
+                setHtml(props.content)
+            }
+        }, 0)
+    }, [props.step])
 
     const toolbarConfig = {}
     const editorConfig = {

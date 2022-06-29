@@ -3,26 +3,38 @@ import { PageHeader, Steps, Button, Input, Form, Select, message, notification }
 import axios from 'axios';
 import './NewsAdd.css'
 import NewsEditor from '../../../components/news-manage/NewsEditor';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import '@wangeditor/editor/dist/css/style.css'
 
 const { Step } = Steps;
 const { Option } = Select;
 
 
-export default function NewsAdd() {
+export default function NewsUpdate() {
     var [step, setStep] = useState(0)
     var [categoriesList, setCategoriesList] = useState([])
     var [isBlur, setIsBlur] = useState(false)
     var [content, setContent] = useState("")
     var [info, setInfo] = useState(null)
-
+    const params = useParams()
     var user=JSON.parse(localStorage.getItem('token'))
     useEffect(() => {
         axios.get('/categories').then(res => {
             setCategoriesList(res.data)
         })
     }, [])
+
+    useEffect(() => {
+        axios.get(`/news/${params.id}?_expand=category`).then(res => {
+            console.log(res.data)
+            const {title,categoryId,content}=res.data
+            newsForm.current.setFieldsValue({
+                title,
+                categoryId,
+            })
+            setContent(content)
+        })
+    }, [params.id])
     var newsForm = useRef(null)
 
     const handleNext = () => {
@@ -56,24 +68,17 @@ export default function NewsAdd() {
     
     const navigate=useNavigate()
     const handleNews = (e) => {
-        axios.post('/news', {
+        axios.patch(`/news/${params.id}`, {
             ...info,
             "content": content,
-            "region": user.region?user.region:'全球',
-            "author": user.username,
-            "roleId": user.roleId,
             "auditState": e,
-            "publishState": 0,
-            "createTime": Date.now(),
-            "star": 0,
-            "view": 0,
         }).then(res=>{
             // console.log(res)
             navigate(`${e===0?'/news-manage/draft':'/audit-manage/list'}`)
             notification.info({
                 message: `Notification`,
                 description:
-                  `你可以到${e===0?'草稿箱':'审核列表'}中查看新闻`,
+                  `更新成功，你可以到${e===0?'草稿箱':'审核列表'}中查看新闻`,
                 placement:'bottomRight',
               });
         })
@@ -83,7 +88,8 @@ export default function NewsAdd() {
         <div>
             <PageHeader
                 className="site-page-header"
-                title="撰写新闻"
+                onBack={()=>navigate('/news-manage/draft')}
+                title="更新新闻"
             />
             <Steps style={{ width: '90%', marginLeft: '5%' }} current={step}>
                 <Step title="基本信息" description="新闻标题，新闻分类" />
@@ -116,16 +122,16 @@ export default function NewsAdd() {
                 </Form>
             </div>
             <div style={{ width: '90%', margin: '30px 5%', }} className={step === 1 ? '' : 'newsAddHidden'}>
-                <NewsEditor setIsBlur={() => { setIsBlur() }} isBlur={isBlur} getContent={(data) => {
+                <NewsEditor step={step} content={content} setIsBlur={() => { setIsBlur() }} isBlur={isBlur} getContent={(data) => {
                     //  console.log(content)  
                     setContent(data)
+                    
                 }} />
             </div>
             <div style={{ marginLeft: '5%' }}>
                 {
                     step === 2 ? <span>
                         <Button onClick={() => handleNews(0)} type='primary' style={{ marginRight: '10px' }}>保存草稿</Button>
-                        <Button onClick={() => handleNews(1)} style={{ marginRight: '10px' }} danger >提交审核</Button>
                     </span> : ''
                 }
                 {

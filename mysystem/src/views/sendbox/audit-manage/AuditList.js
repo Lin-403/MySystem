@@ -1,7 +1,11 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect } from 'react'
 
 export default function AuditList() {
+  useEffect(()=>{
+    axios.get()
+  },[])
   return (
-    <div>AuditList</div>
+    <div></div>
   )
 }

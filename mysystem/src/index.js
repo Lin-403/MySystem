@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'antd/dist/antd.css';
 import './util/http'
+import '@wangeditor/editor/dist/css/style.css' // 引入 css
 
 // import 'default-passive-events'
 

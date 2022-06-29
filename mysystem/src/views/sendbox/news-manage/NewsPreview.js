@@ -3,6 +3,8 @@ import { Button, Descriptions, PageHeader } from 'antd';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment'
+import './NewPreviews.css'
+import '@wangeditor/editor/dist/css/style.css' // 引入 css
 
 export default function NewsPreview() {
     var [newsDetail, setNewsDetail] = useState(null)
@@ -24,7 +26,7 @@ export default function NewsPreview() {
                     <PageHeader
                         ghost={false}
                         onBack={() => window.history.back()}
-                        title="返回"
+                        title={newsDetail.title}
                         subTitle={newsDetail.category.title}
                     >
                         <Descriptions size="small" column={3}>
@@ -40,7 +42,7 @@ export default function NewsPreview() {
     
                         </Descriptions>
                     </PageHeader>
-                    <div dangerouslySetInnerHTML={{
+                    <div className='editor-content-view' dangerouslySetInnerHTML={{
                         __html:newsDetail.content
                     }} style={{
                         border:'1px solid #BAC0BA',

@@ -9,6 +9,7 @@ import NewsAdd from '../views/sendbox/news-manage/NewsAdd'
 import NewsCategory from '../views/sendbox/news-manage/NewsCategory'
 import NewsDraft from '../views/sendbox/news-manage/NewsDraft'
 import NewsPreview from '../views/sendbox/news-manage/NewsPreview'
+import NewsUpdate from '../views/sendbox/news-manage/NewsUpdate'
 import NotFound from '../views/sendbox/notfound/NotFound'
 import Published from '../views/sendbox/publish-manage/Published'
 import Sunset from '../views/sendbox/publish-manage/Sunset'
@@ -26,6 +27,7 @@ const dataRoutes={
     '/news-manage/draft': <NewsDraft />,
     '/news-manage/category': <NewsCategory />,
     '/news-manage/preview/:id': <NewsPreview />,
+    '/news-manage/update/:id': <NewsUpdate />,
     '/audit-manage/audit': <Audit/>,
     '/audit-manage/list': <AuditList/>,
     '/publish-manage/unpublished': <Unpublished />,
