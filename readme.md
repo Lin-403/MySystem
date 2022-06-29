@@ -776,16 +776,18 @@ axios.defaults.baseURL="http://localhost:8000"
 > ~~然后以html文件形式存储~~
 >
 > ```
->  cnpm i --save draftjs-to-html  
+> cnpm i --save draftjs-to-html  
 > ```
 >
 > ```
->     // "react": "^18.2.0",
->     // "react-dom": "^18.2.0",
->     
+>  // "react": "^18.2.0",
+>  // "react-dom": "^18.2.0",
+>  
 > ```
 >
-> 使用
+> 使用 wangeditor
+>
+> 编辑器输出或者生成的 HTML 都是**纯标签**，没有内联样式。所以，显示 HTML 时需要你自定义样式。可参考以下示例
 >
 > ```
 > https://github.com/wangfupeng1988/react-wangeditor-demo
@@ -838,10 +840,56 @@ const handleNews = (e) => {
    为了防止XSS，所以{}是不支持html文件解析的
 
    如果非要解析：
+   
+   ```
+   <div dangerouslySetInnerHTML={{
+           __html:newsDetail.content
+       }}></div>
+   ```
+   
+3. 更新草稿
 
-```jsx
-<div dangerouslySetInnerHTML={{
-        __html:newsDetail.content
-    }}></div>
-```
+   首先获取原有信息，通过对news发起请求获取线管数据和分类，然后使用ref对Form表单进行初始化数据
 
+   ```js
+   useEffect(() => {
+       axios.get(`/news/${params.id}?_expand=category`).then(res => {
+           console.log(res.data)
+           const {title,categoryId}=res.data
+           newsForm.current.setFieldsValue({
+               title,
+               categoryId
+           })
+       })
+   }, [params.id])
+   ```
+
+   对于富文本编辑器，注意判断useEffect的执行时间，依赖step，
+
+   ```js
+    useEffect(() => {
+        setTimeout(() => {
+            // console.log(props.content)
+            if (props.content) {
+                setHtml(props.content)
+            }
+        }, 0)
+    }, [props.step])
+   ```
+
+   
+
+### 审核列表
+
+1. 请求的几个注意点
+
+   这里会像news发起请求，筛选出，作者本人的、非草稿箱的、需要审核的
+
+   > ​	1.username
+   >
+   > 2. **auditState**_ne=0    _ne表示不等于
+   > 3. **publishState**_lte=1  表示小于等于
+
+审核主要改变auditState，即文章发布前的一系列流程
+
+发布则是改变publishedState，即文章发布后的状态（下线）

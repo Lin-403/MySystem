@@ -54,7 +54,7 @@ export default function NewsDraft() {
       notification.info({
         message: `Notification`,
         description:
-          `你可以到审核列表中查看新闻`,
+          `提交审核成功，可以到审核列表中查看哟😙~♥~`,
         placement: 'bottomRight',
       });
     })

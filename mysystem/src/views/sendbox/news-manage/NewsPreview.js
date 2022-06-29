@@ -17,8 +17,8 @@ export default function NewsPreview() {
             setNewsDetail(res.data)
         })
     }, [params.id])
-
-    console.log(params)
+     const colorList=['blue','orange','green','red']
+    // console.log(params)
     return (
         <div>
             {
@@ -34,8 +34,8 @@ export default function NewsPreview() {
                             <Descriptions.Item label="创建时间">{moment(newsDetail.createTime).format('YYYY-MM-DD HH:mm:ss')}</Descriptions.Item>
                             <Descriptions.Item label="发布时间">{newsDetail.publishTime ?moment(newsDetail.publishTime).format('YYYY-MM-DD HH:mm:ss') :'--'}</Descriptions.Item>
                             <Descriptions.Item label="区域">{newsDetail.region}</Descriptions.Item>
-                            <Descriptions.Item label="审核状态"><span style={{color:"red"}}>{auditList[newsDetail.auditState]}</span></Descriptions.Item>
-                            <Descriptions.Item label="发布状态"><span style={{color:"red"}} >{publishList[newsDetail.publishState]}</span></Descriptions.Item>
+                            <Descriptions.Item label="审核状态"><span style={{color:colorList[newsDetail.auditState]}}>{auditList[newsDetail.auditState]}</span></Descriptions.Item>
+                            <Descriptions.Item label="发布状态"><span style={{color:colorList[newsDetail.publishState]}} >{publishList[newsDetail.publishState]}</span></Descriptions.Item>
                             <Descriptions.Item label="访问数量"><span style={{color:"#34CB39"}}>{newsDetail.view}</span></Descriptions.Item>
                             <Descriptions.Item label="点赞数量"><span style={{color:"#34CB39"}}>{newsDetail.star}</span></Descriptions.Item>
                             <Descriptions.Item label="评论数量"><span style={{color:"#34CB39"}}>0</span></Descriptions.Item>

@@ -132,6 +132,8 @@ export default function NewsUpdate() {
                 {
                     step === 2 ? <span>
                         <Button onClick={() => handleNews(0)} type='primary' style={{ marginRight: '10px' }}>保存草稿</Button>
+                        <Button onClick={() => handleNews(1)} style={{ marginRight: '10px' }} danger >提交审核</Button>
+
                     </span> : ''
                 }
                 {

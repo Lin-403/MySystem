@@ -73,7 +73,7 @@ export default function NewsAdd() {
             notification.info({
                 message: `Notification`,
                 description:
-                  `你可以到${e===0?'草稿箱':'审核列表'}中查看新闻`,
+                  `你可以到${e===0?'草稿箱':'审核列表'}中查看新闻哟😙~♥~`,
                 placement:'bottomRight',
               });
         })
