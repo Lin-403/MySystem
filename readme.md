@@ -909,3 +909,27 @@ const handleNews = (e) => {
 ### 发布管理
 
 根据publishState=1/2/3进行区分是 【待发布/已发布/已下线】
+
+## 状态管理
+
+```
+cnpm i --save redux react-redux
+```
+
+> Provider中传入整体store给所有组件使用
+>
+> 通过createStore创建store，传入reducer
+>
+> reducer创建传入prevState和action，通过combineReducer合并多个reducer
+>
+> 后续事件触发，调用dispatch({action})将这个action传递给reducer，reducer根据不同行为switch处理后，将结果返回，
+>
+> 如果想要获取store中定义的状态，引入connect，包裹组件connect（[store中所需]）（组件）
+>
+> ```
+> connect(mapStateToProps,mapDispatchToProps)
+> ```
+>
+> 以上同步处理
+>
+> 对于异步，redux和react-redux是无法直接处理的，可以引入中间件或redux-saga

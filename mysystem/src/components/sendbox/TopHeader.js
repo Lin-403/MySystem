@@ -7,9 +7,14 @@ import {
 import React, { useState } from 'react'
 import { Dropdown,Avatar, Layout, Menu } from 'antd'
 import { useNavigate } from 'react-router-dom';
+
+import {connect} from 'react-redux'
+
+
 const { Header } = Layout;
 
-export default function TopHeader() {
+function TopHeader(props) {
+    console.log(props)
     var [collapsed, setCollapsed] = useState(false)
     const navigate=useNavigate()
     const {role:{roleName},username}=JSON.parse(localStorage.getItem('token'))
@@ -30,7 +35,7 @@ export default function TopHeader() {
             }}
         >
             {
-                collapsed ? <MenuUnfoldOutlined onClick={() => setCollapsed(!collapsed)} /> : <MenuFoldOutlined onClick={() => setCollapsed(!collapsed)} />
+                props.isCollapsed ? <MenuUnfoldOutlined onClick={() => props.changeCollapsed()} /> : <MenuFoldOutlined onClick={() => props.changeCollapsed()} />
             }
             <div style={{ float: 'right' }}>
                 <span style={{marginRight:'10px'}}>欢迎 <span style={{color:'#4266DC',fontSize:'16px'}}>{username}</span> 回来 </span>
@@ -41,3 +46,20 @@ export default function TopHeader() {
         </Header>
     )
 }
+
+const mapStateToProps=(state)=>{
+    console.log(state)
+    return({
+        isCollapsed:state.CollapsedReducer.isCollapsed
+    })
+}
+
+const mapDispatchToProps={
+    changeCollapsed(){
+        return {
+            type:'change-collapsed',
+        }
+    }
+}
+
+export default connect( mapStateToProps,mapDispatchToProps)(TopHeader)

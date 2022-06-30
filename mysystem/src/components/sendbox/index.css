@@ -7,6 +7,8 @@
     padding:16px 10px;
     background-color: #fbfbff;
     border-bottom: 1px dotted #E9E9EB;
+    height: 60px;
+
 }
 .ant-layout-sider-children {
     background: #fff;

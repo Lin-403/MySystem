@@ -23,43 +23,9 @@ import axios from 'axios';
 import React, { memo, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './index.css'
+import {connect} from 'react-redux'
 
 const { Sider } = Layout;
-
-// const items = [
-//     {
-//         key: '/home',
-//         icon: <UserOutlined />,
-//         label: '首页',
-//     },
-//     {
-//         key: '/user-manage',
-//         icon: <VideoCameraOutlined />,
-//         label: '用户管理',
-//         children: [{
-//             key: '/user-manage/list',
-//             icon: <VideoCameraOutlined />,
-//             label: '用户列表',
-//         }]
-//     },
-//     {
-//         key: '/right-mange',
-//         icon: <UploadOutlined />,
-//         label: '权限管理',
-//         children: [
-//             {
-//                 key: '/right-mange/role/list',
-//                 icon: <UserOutlined />,
-//                 label: '角色列表',
-//             },
-//             {
-//                 key: '/right-manage/right/list',
-//                 icon: <VideoCameraOutlined />,
-//                 label: '权限列表',
-//             },
-//         ]
-//     },
-// ]
 
 
 const iconList = {
@@ -82,7 +48,7 @@ const iconList = {
     '/publish-manage/sunset': <FileExcelOutlined />,
 }
 
-export default memo(function SideMenu() {
+ function SideMenu(props) {
     const [items, setItems] = useState([])
     const {role:{rights}}=JSON.parse(localStorage.getItem('token'))
     useEffect(() => {
@@ -121,9 +87,11 @@ export default memo(function SideMenu() {
     }
     return (
 
-        <Sider trigger={null} collapsible >
+        <Sider trigger={null} collapsible collapsed={props.isCollapsed} >
             <div style={{ display: 'flex', 'flexDirection': 'column', height: '100%' }}>
-                <div className="logo">全球新闻发布系统</div>
+                
+                    <div className="logo">{props.isCollapsed?'HI':'全球新闻发布系统'}</div>
+                
                 <div style={{ flex: '1', overflow: 'auto' }}>
                     <Menu
                         mode="inline"
@@ -136,6 +104,12 @@ export default memo(function SideMenu() {
             </div>
         </Sider>
     )
-})
+}
+const mapStateToProps=(state)=>{
+    console.log(state)
+    return({
+        isCollapsed:state.CollapsedReducer.isCollapsed
+    })
+}
 
-
+export default connect(mapStateToProps)(memo(SideMenu))

@@ -3,7 +3,8 @@ import './App.scss'
 
 import IndexRouter from './router/IndexRouter.js';
 import './App.css'
-
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 
 export default function App() {
@@ -17,6 +18,8 @@ export default function App() {
   // })
  
   return (
-    <IndexRouter />
+    <Provider store={store}>
+      <IndexRouter />
+    </Provider>
   );
 }
