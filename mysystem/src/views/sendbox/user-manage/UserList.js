@@ -23,8 +23,10 @@ export default function UserList() {
     var [isUpdateVisible, setIsUpdateVisible] = useState(false)
     var updateForm = useRef(null)
     var [isDisable, setIsDisabled] = useState(false)
-
+    var [newRes, setNewRes] = useState(null)
     var [current, setCurrent] = useState(null)
+    var [newsList, setNewsList] = useState([])
+
     //根据token获取当前用户相关信息
     const { roleId, region, username } = JSON.parse(localStorage.getItem('token'))
 
@@ -51,13 +53,19 @@ export default function UserList() {
             setRegionList(res.data)
         })
     }, [])
-
+    useEffect(() => {
+        // console.log(newRes)
+        axios.get(`/news`).then(res => {
+            setNewsList(res.data)
+            // console.log(res.data)
+        })
+    }, [])
     useEffect(() => {
         axios.get('/roles').then(res => {
             // console.log(res.data)
             setRolesList(res.data)
         })
-    }, [])
+    }, [newRes])
 
     const columns = [
         {
@@ -194,6 +202,16 @@ export default function UserList() {
     const success = () => {
         message.success('This is a success message');
     };
+    useEffect(() => {
+        // console.log('xiugaile')
+        newsList.map(item => {
+            if (newRes && item.author === newRes.username) {
+                axios.patch(`/news/${item.id}`,{
+                    region:newRes.region
+                })
+            }
+        })
+    }, [dataSource])
     const updateFormOk = () => {
         updateForm.current.validateFields().then((res) => {
             setIsUpdateVisible(false)
@@ -213,9 +231,9 @@ export default function UserList() {
                 }
                 return item
             }))
-            axios.patch(`/users/${current.id}`, res)
-            console.log(res)
-            
+            axios.patch(`/users/${current.id}?_embed=news`, res)
+            // console.log(res)
+            setNewRes(res)
             //    console.log(res)
             setIsDisabled(!isDisable)
 
@@ -223,7 +241,7 @@ export default function UserList() {
             console.log(error)
         })
     }
-   
+
     return (
         <div style={{ height: '100%', overflow: 'auto' }}>
             <Button type="primary" onClick={() => setIsVisible(true)}>添加用户</Button>
