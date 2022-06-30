@@ -13,7 +13,7 @@ export default function AuditList() {
     })
   }, [username])
   const auditList = ['未审核', '审核中', '已通过', '未通过']
-  const publishList = ['未发布', '待发布', '已上线', '已下线']
+
   const colorList = ['blue', 'orange', 'green', 'red']
 
   const handleRevert = (item) => {
@@ -37,7 +37,8 @@ export default function AuditList() {
     setDataSource(dataSource.filter(data => data.id !== item.id))
 
     axios.patch(`/news/${item.id}`, {
-      publishState: 2
+      publishState: 2,
+      publishTime:Date.now()
     }).then(res => {
       notification.info({
         message: `Notification`,

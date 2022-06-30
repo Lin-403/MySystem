@@ -111,6 +111,7 @@ export default function NewsDraft() {
   return (
     <div style={{ height: '100%', overflow: 'auto' }}>
       <Table dataSource={dataSource} columns={columns}
+      rowKey={item=>item.id}
         pagination={{
           pageSize: 5
         }} />
