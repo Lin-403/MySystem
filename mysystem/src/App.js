@@ -4,7 +4,8 @@ import './App.scss'
 import IndexRouter from './router/IndexRouter.js';
 import './App.css'
 import { Provider } from 'react-redux';
-import store from './redux/store';
+import {store,persistor} from './redux/store';
+import { PersistGate } from 'redux-persist/integration/react'
 
 
 export default function App() {
@@ -19,7 +20,10 @@ export default function App() {
  
   return (
     <Provider store={store}>
-      <IndexRouter />
+       <PersistGate loading={null} persistor={persistor}>
+       <IndexRouter />
+       </PersistGate>
+      
     </Provider>
   );
 }

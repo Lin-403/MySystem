@@ -5,28 +5,34 @@ import {
 } from '@ant-design/icons';
 
 import React, { useState } from 'react'
-import { Dropdown,Avatar, Layout, Menu } from 'antd'
+import { Dropdown, Avatar, Layout, Menu } from 'antd'
 import { useNavigate } from 'react-router-dom';
 
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
+import { store } from '../../redux/store';
 
 
 const { Header } = Layout;
 
 function TopHeader(props) {
     console.log(props)
-    var [collapsed, setCollapsed] = useState(false)
-    const navigate=useNavigate()
-    const {role:{roleName},username}=JSON.parse(localStorage.getItem('token'))
+    console.log(store.getState())
+    const navigate = useNavigate()
+    const changeCollapsed = () => {
+        //改变state的isCollapsed
+        // console.log(props)
+        props.changeCollapsed()
+    }
+    const { role: { roleName }, username } = JSON.parse(localStorage.getItem('token'))
     const menu = (
         <Menu>
             <Menu.Item>{roleName}</Menu.Item>
-            <Menu.Item danger onClick={()=>{
+            <Menu.Item danger onClick={() => {
                 localStorage.removeItem('token')
                 navigate('/login')
             }}>退出</Menu.Item>
         </Menu>
-      );
+    );
     return (
         <Header
             className="site-layout-background"
@@ -35,10 +41,10 @@ function TopHeader(props) {
             }}
         >
             {
-                props.isCollapsed ? <MenuUnfoldOutlined onClick={() => props.changeCollapsed()} /> : <MenuFoldOutlined onClick={() => props.changeCollapsed()} />
+                props.isCollapsed ? <MenuUnfoldOutlined onClick={changeCollapsed} /> : <MenuFoldOutlined onClick={changeCollapsed} />
             }
             <div style={{ float: 'right' }}>
-                <span style={{marginRight:'10px'}}>欢迎 <span style={{color:'#4266DC',fontSize:'16px'}}>{username}</span> 回来 </span>
+                <span style={{ marginRight: '10px' }}>欢迎 <span style={{ color: '#4266DC', fontSize: '16px' }}>{username}</span> 回来 </span>
                 <Dropdown overlay={menu}>
                     <span><Avatar size="large" icon={<UserOutlined />} /></span>
                 </Dropdown>
@@ -47,19 +53,19 @@ function TopHeader(props) {
     )
 }
 
-const mapStateToProps=(state)=>{
+const mapStateToProps = (state) => {
     console.log(state)
-    return({
-        isCollapsed:state.CollapsedReducer.isCollapsed
+    return ({
+        isCollapsed: state.CollapsedReducer.isCollapsed
     })
 }
 
-const mapDispatchToProps={
-    changeCollapsed(){
+const mapDispatchToProps = {
+    changeCollapsed() {
         return {
-            type:'change-collapsed',
+            type: 'change-collapsed',
         }
     }
 }
 
-export default connect( mapStateToProps,mapDispatchToProps)(TopHeader)
+export default connect(mapStateToProps, mapDispatchToProps)(TopHeader)
