@@ -1043,3 +1043,85 @@ github搜redux-persist
 
 ## 动态布局
 
+使用localStorage记忆化存储位置和大小
+
+## 首页
+
+### 数据
+
+获取点赞和浏览量前几的数据，请求可以使用`&_sort=[浏览/点赞]`
+
+```
+/news?publishState=2&_expand=category&_sort=view
+```
+
+后接`&_order=desc`表示倒序排序
+
+```
+/news?publishState=2&_expand=category&_sort=view&_order=desc
+```
+
+限制获取数据的条数`&_limit=6`
+
+```
+/news?publishState=2&_expand=category&_sort=view&_order=desc&_limit=6
+```
+
+### ECharts数据分析
+
+```
+cnpm i --save echarts
+```
+
+> lodash使用
+>
+> ```js
+> import _ from 'lodash'
+> 
+> console.log(_.groupBy(res.data,item=>item.category.title))
+> //按第二个参数进行分类
+> 
+> //将其作为obj参数传递给charts
+> //通过Object.keys(obj)获取键名作为横轴，Object.values(obj)获取相应键名对应的键值
+> //相关配置项查看配置手册
+> 
+> 
+> //然后响应式布局，每次窗口改变可以监听重新渲染一下图标
+>  window.onresize = () => {        //每次窗口改变，重新渲染
+>      // console.log("resize")
+>      myChart.resize()
+>  }
+>  //但是记住要在组件销毁的时候进行将该监听事件一起销毁
+> ```
+>
+> 
+
+### 抽屉组件
+
+> 由于由useState生成的改变你状态的方法是异步渲染dom，所以在还没有渲染完就调用饼状图显示
+>
+> ```
+>  setVisible(true)   //异步
+>  renderPeiView()    //同步
+> ```
+>
+> 所以导致dom节点在` setVisible(true) `还没准备好，就进行`	renderPeiView()`渲染，所以设置定时器异步渲染（上一辈子的React）
+>
+> 
+>
+> React18使用async/await
+>
+> ```js
+> async function handlePeiShow(){
+>     await setVisible(true)
+>     await renderPeiView()
+> }
+> ```
+>
+> 
+
+## 游客系统
+
+> lodash对数据进行处理
+>
+> Object.entries可以将对象转成数组
