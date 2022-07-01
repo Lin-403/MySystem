@@ -101,7 +101,7 @@ export default function NewsCategory() {
     return <td {...restProps}>{childNode}</td>;
   };
   const handleSave = (row) => {
-    console.log(row)
+    // console.log(row)
     setDataSource(dataSource.map(item => {
       if (item.id === row.id) {
         return {

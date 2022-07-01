@@ -936,6 +936,12 @@ cnpm i --save redux react-redux
 
 ## 加载中拦截器设置
 
+github上搜axios
+
+> https://github.com/axios/axios
+>
+> https://github.com/axios/axios#interceptors
+
 ```js
 axios.interceptors.request.use(function (config) {
   // Do something before request is sent
@@ -971,4 +977,69 @@ axios.interceptors.response.use(function (response) {
   return Promise.reject(error);
 });
 ```
+
+## 状态持久化存储
+
+> 就是将想持久存储的状态存储在localStorage中，下面的插件可以很好的将redux和本地结合
+
+github搜redux-persist
+
+> https://github.com/rt2zz/redux-persist
+>
+> npm install redux-persist
+
+应用步骤（按网上来）
+
+> 1. 引入
+>
+>    ```
+>    import { persistStore, persistReducer } from 'redux-persist'
+>    import storage from 'redux-persist/lib/storage' 
+>    ```
+>
+> 2. 创建
+>
+>    ```js
+>    const persistConfig = {    //配置
+>        key: 'persistData',
+>        storage,
+>    }
+>    
+>    const reducer = combineReducers({       //reducer
+>        CollapsedReducer,
+>        LoadingReducer,
+>          whitelist: ['CollapsedReducer'] ,  //设置黑/白名单，选择性存储状态
+>        // blacklist: ['LoadingReducer']
+>    })
+>    const persistedReducer = persistReducer(persistConfig, reducer)  
+>      
+>    
+>    const store = createStore(persistedReducer);
+>    const persistor = persistStore(store)
+>    export {
+>        store,
+>        persistor
+>    }
+>    ```
+>
+> 3. 修改导出
+>
+>    ```js
+>    import {axios} from '../../路径'
+>    ```
+>
+> 4. 组件包裹
+>
+>    ```jsx
+>     <Provider store={store}>
+>        <PersistGate loading={null} persistor={persistor}>
+>            <IndexRouter />
+>        </PersistGate>
+>    
+>    </Provider>
+>    ```
+>
+>    
+
+## 动态布局
 

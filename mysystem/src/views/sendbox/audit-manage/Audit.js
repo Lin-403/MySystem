@@ -16,11 +16,11 @@ export default function Audit() {
     
     axios.get('/news?auditState=1&_expand=category').then(res => {
       const list = res.data
-      console.log(list.filter(item => {
-        console.log(item,region)
-        console.log(roleObj[item.roleId])
-        return item.region === region && roleObj[item.roleId] === 'editor'
-      }))
+      // console.log(list.filter(item => {
+      //   console.log(item,region)
+      //   console.log(roleObj[item.roleId])
+      //   return item.region === region && roleObj[item.roleId] === 'editor'
+      // }))
       setDataSource(roleObj[roleId] === "superadmin" ? list : [
         ...list.filter(item => item.region === region && roleObj[item.roleId] === 'editor')
       ])

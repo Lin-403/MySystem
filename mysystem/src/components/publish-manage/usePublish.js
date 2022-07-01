@@ -9,7 +9,7 @@ export default function usePublish(type) {
     const user = JSON.parse(localStorage.getItem('token'))
     const navigate = useNavigate()
     const handelPublish=(id)=>{
-        console.log(id)
+        // console.log(id)
         setDataSource(dataSource.filter(data => data.id !== id))
 
         if(type!==3){

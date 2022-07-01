@@ -126,7 +126,7 @@ export default function UserList() {
         },
     ];
     const check = (item) => {
-        console.log(item)
+        // console.log(item)
         if (item.roleId === 1) {
             setIsDisabled(true)
         }

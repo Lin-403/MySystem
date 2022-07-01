@@ -31,7 +31,7 @@ export default function NewsAdd() {
         }
         if (step === 0) {
             newsForm.current.validateFields().then(res => {
-                console.log(res)
+                // console.log(res)
                 setInfo(res)
                 setStep(step + 1)
             }).catch(error => {
@@ -39,7 +39,7 @@ export default function NewsAdd() {
             })
         }
         else {
-            console.log(info, content)
+            // console.log(info, content)
             if (content === '') {
                 message.error('新闻内容不能为空！')
 

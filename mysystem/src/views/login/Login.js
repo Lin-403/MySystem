@@ -12,7 +12,7 @@ export default function Login() {
     // console.log('Success:', values);
      axios.get(`/users?username=${values.username}&password=${values.password}&roleState=true&_expand=role`)
      .then(res=>{
-      console.log(res.data)
+      // console.log(res.data)
       if(res.data.length===0){
         error();
       }

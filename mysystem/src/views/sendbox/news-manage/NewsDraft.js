@@ -46,7 +46,7 @@ export default function NewsDraft() {
   }
 
   const handleSubmit = (item) => {
-    console.log(item)
+    // console.log(item)
     axios.patch(`/news/${item.id}`, {
       auditState: 1
     }).then(res => {

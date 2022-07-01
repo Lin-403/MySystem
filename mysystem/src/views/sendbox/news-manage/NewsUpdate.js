@@ -26,7 +26,7 @@ export default function NewsUpdate() {
 
     useEffect(() => {
         axios.get(`/news/${params.id}?_expand=category`).then(res => {
-            console.log(res.data)
+            // console.log(res.data)
             const {title,categoryId,content}=res.data
             newsForm.current.setFieldsValue({
                 title,
@@ -43,7 +43,7 @@ export default function NewsUpdate() {
         }
         if (step === 0) {
             newsForm.current.validateFields().then(res => {
-                console.log(res)
+                // console.log(res)
                 setInfo(res)
                 setStep(step + 1)
             }).catch(error => {
@@ -51,7 +51,7 @@ export default function NewsUpdate() {
             })
         }
         else {
-            console.log(info, content)
+            // console.log(info, content)
             if (content === '') {
                 message.error('新闻内容不能为空！')
 

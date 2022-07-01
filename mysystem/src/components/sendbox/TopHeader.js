@@ -15,8 +15,8 @@ import { store } from '../../redux/store';
 const { Header } = Layout;
 
 function TopHeader(props) {
-    console.log(props)
-    console.log(store.getState())
+    // console.log(props)
+    // console.log(store.getState())
     const navigate = useNavigate()
     const changeCollapsed = () => {
         //改变state的isCollapsed
@@ -54,7 +54,7 @@ function TopHeader(props) {
 }
 
 const mapStateToProps = (state) => {
-    console.log(state)
+    // console.log(state)
     return ({
         isCollapsed: state.CollapsedReducer.isCollapsed
     })

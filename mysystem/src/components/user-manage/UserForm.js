@@ -36,7 +36,7 @@ const UserForm=forwardRef((props,ref)=> {
                  return false;
              }
              else {
-                console.log(item,'----',region)
+                // console.log(item,'----',region)
                 if(item.title===region) return false;
                 else return true;
              }
@@ -54,14 +54,14 @@ const UserForm=forwardRef((props,ref)=> {
              }
         }
         else {
-            console.log('addd')
+            // console.log('addd')
             if(roleObj[roleId]==='superadmin'){
-                console.log('12313123123123123213')
+                // console.log('12313123123123123213')
                  return false;
              }
              else {
-                console.log('1111111111111111')
-                console.log(item.id)
+                // console.log('1111111111111111')
+                // console.log(item.id)
                 return roleObj[item.id]!=='editor'
              }
         }

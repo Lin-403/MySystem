@@ -106,7 +106,7 @@ const iconList = {
     )
 }
 const mapStateToProps=(state)=>{
-    console.log(state)
+    // console.log(state)
     return({
         isCollapsed:state.CollapsedReducer.isCollapsed
     })
