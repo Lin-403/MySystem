@@ -4,12 +4,14 @@
       padding: 0 10px;
       margin-top: 20px;
       overflow-x: auto;
+      z-index: 1000;
     }
 
     .editor-content-view p,
     .editor-content-view li {
       white-space: pre-wrap;
       /* 保留空格 */
+      z-index: 1000;
     }
 
     .editor-content-view blockquote {
@@ -17,6 +19,7 @@
       padding: 10px 10px;
       margin: 10px 0;
       background-color: #f1f1f1;
+      z-index: 1000;
     }
 
     .editor-content-view code {
@@ -24,15 +27,18 @@
       background-color: #eee;
       padding: 3px;
       border-radius: 3px;
+      z-index: 1000;
     }
 
     .editor-content-view pre>code {
       display: block;
       padding: 10px;
+      z-index: 1000;
     }
 
     .editor-content-view table {
       border-collapse: collapse;
+      z-index: 1000;
     }
 
     .editor-content-view td,
@@ -40,17 +46,21 @@
       border: 1px solid #ccc;
       min-width: 50px;
       height: 20px;
+      z-index: 1000;
     }
 
     .editor-content-view th {
       background-color: #f1f1f1;
+      z-index: 1000;
     }
 
     .editor-content-view ul,
     .editor-content-view ol {
       padding-left: 20px;
+      z-index: 1000;
     }
 
     .editor-content-view input[type="checkbox"] {
       margin-right: 5px;
+      z-index: 1000;
     }

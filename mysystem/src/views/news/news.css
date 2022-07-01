@@ -1,0 +1,14 @@
+.ant-page-header-heading-title{
+    font-size: 30px;
+}
+.ant-page-header-heading-sub-title{
+    margin-top: 5px;
+}
+
+.ant-pagination{
+    
+}
+.editor-content-view{
+    z-index: 1000;
+    background: '#fff';
+}

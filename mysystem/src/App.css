@@ -13,4 +13,5 @@
 .ant-layout-content {
     z-index: 1000;
     border-radius: 5px;
+    overflow: auto;
 }
